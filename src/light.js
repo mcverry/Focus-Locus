@@ -14,16 +14,26 @@
 
     exports.Light.prototype = {
         update : function() {
-            var entities = this.game.coq.entities.all();
-            var segments = entities.map(function(ent) {
-                return ent.getLightPoints ? ent.getLightPoints(this) : false;
-            }).filter(function(segs) {
-                return !!segs;
+            var self = this;
+            var segments = [];
+            this.game.coq.entities.all().forEach(function(ent) {
+                if (ent.getLightSegments) {
+                    segments = segments.concat(ent.getLightSegments(self));
+                }
             });
+
             segments = segments.filter(function(seg) {
                 return Math.sqrt(Math.pow(this.center.x - seg.x1, 2) + Math.pow(this.center.y - seg.y1, 2)) < this.maxDistance;
             }.bind(this));
+
+            //add outside of box
+            segments.push({x1 : 0, y1 : 0, x2 : 800, y2: 0});
+            segments.push({x1 : 800, y1 : 0, x2 : 800, y2: 600});
+            segments.push({x1 : 800, y1 : 600, x2 : 0, y2: 600});
+            segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0});
+
             var points = boxSegmentsToPoints(segments);
+            this.xpoints = points;
             var angles = this.getAllAngles(points);
             this.getSortedIntersects(angles, segments);
         },
@@ -79,14 +89,18 @@
             if(this.intersects.length === 0) return;
             //draw polygon
             var i;
+
+            ctx.fillStyle = "white";
+            ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
+
             ctx.fillStyle = this.color;
-            ctx.beginPath();
             ctx.moveTo(this.intersects[0].x, this.intersects[0].y);
-            for (i = 1; i < this.intersects.length; i++) {
+            ctx.fillRect(this.intersects[0].x, this.intersects[0].y, 3, 3);
+            for (i = 0; i < this.intersects.length; i++) {
                 ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+                ctx.fillRect(this.intersects[i].x, this.intersects[i].y, 3, 3);
             }
             ctx.closePath();
-            ctx.stroke();
             ctx.fill();
         }
     };
