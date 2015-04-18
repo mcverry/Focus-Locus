@@ -45,7 +45,8 @@
                 y1 : point.y,
                 x2 : point.x + dx,
                 y2 : point.y + dy,
-                strength : incoming.strength - 1
+                strength : incoming.strength - 1,
+                color : incoming.color
             };
 
             if (ray.strength > 0) {

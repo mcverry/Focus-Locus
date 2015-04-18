@@ -35,7 +35,8 @@
                         y1 : this.center.y,
                         x2 : this.center.x + dx,
                         y2 : this.center.y + dy,
-                        strength : this.strength
+                        strength : this.strength,
+                        color : this.color
                 };
                 this.rays.push(ray);
             }
@@ -89,23 +90,26 @@
             //draw polygon
             var i;
 
-            ctx.strokeStyle = this.color;
             ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
 
-            ctx.beginPath();
 
             if (this.radial) {
                 for (i = 0; i < this.intersects.length; i++) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = this.rays[i].color;
                     ctx.moveTo(this.rays[i].x1, this.rays[i].y1);
                     ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+                    ctx.stroke();
                 }
             } else {
+                ctx.beginPath();
+                ctx.strokeStyle = this.color;
                 for (i = 0; i < this.intersects.length; i++) {
                     ctx.moveTo(this.center.x, this.center.y);
                     ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
                 }
+                ctx.stroke();
             }
-            ctx.stroke();
 
             //clear out dynamic lighting
             if (this.radial) {
