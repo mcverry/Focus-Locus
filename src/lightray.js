@@ -2,8 +2,8 @@
 
     exports.LightRay = function(game, options) {
         this.game = game;
-        this.source = options.source;
-        this.dest = options.dest;
+        this.source = options.source; //light source, has center
+        this.dest = options.dest; //light point, just {x, y, theta}
     };
 
     exports.LightRay.prototype = {
