@@ -1,8 +1,17 @@
 ;(function(exports){
 
+    var dist = function(a, b) {
+        return Math.sqrt(
+            Math.pow((a.x || a.x1) - (b.x || b.x1), 2) +
+            Math.pow((a.y || a.y1) - (b.y || b.y1), 2)
+        );
+    };
+
     exports.Light = function(game, options) {
 
         this.game = game;
+
+        this.parent = options.parent || null;
 
         this.center = options.center;
         this.color = options.color || "white";
@@ -27,14 +36,32 @@
             }.bind(this));
 
             //add outside of box
-            segments.push({x1 : 0, y1 : 0, x2 : 800, y2: 0});
-            segments.push({x1 : 800, y1 : 0, x2 : 800, y2: 600});
-            segments.push({x1 : 800, y1 : 600, x2 : 0, y2: 600});
-            segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0});
+            segments.push({x1 : 0, y1 : 0, x2 : 800, y2: 0, src: false});
+            segments.push({x1 : 800, y1 : 0, x2 : 800, y2: 600, src : false});
+            segments.push({x1 : 800, y1 : 600, x2 : 0, y2: 600, src : false});
+            segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0, src : false});
 
             var points = boxSegmentsToPoints(segments);
-            this.xpoints = points;
             var angles = this.getAllAngles(points);
+
+            if (this.parent) {
+                var d1 = Math.asin(dist(this.parent.center, this.center) / dist(this.parent.getLightSegments(this)[0], this.center));
+                var d2 = Math.asin(dist(this.parent.center, this.center) / dist(this.parent.getLightSegments(this)[1], this.center));
+                angles = angles.filter(function(angle) {
+                    alpha = Math.PI - angle;
+                    if (angle > alpha && angle < alpha + d1) {
+                        return true;
+                    }
+                    if (angle < alpha + (Math.PI * 2) - d2 && angle < alpha + (Math.PI/2) - d2) {
+                        return true;
+                    }
+                    if (angle > alpha + Math.PI - d2 && angle < alpha + Math.PI + d1) {
+                        return true;
+                    }
+                    return false;
+                });
+            }
+
             this.getSortedIntersects(angles, segments);
         },
 
