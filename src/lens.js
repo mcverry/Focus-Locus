@@ -5,7 +5,7 @@
         this.center = options.center || {x : 500, y: 100};
         this.size = options.size || {x : 40, y : 40};
 
-        this.focalLength = 40;
+        this.focalLength = 16;
         this.focalLights = [];
         
         this.light = this.game.coq.entities.create(Light, 
@@ -28,7 +28,7 @@
             }
             var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y, 2));
             d = 2 * (d / this.size.x);
-            var a = incoming.angle + (Math.PI / 8) * d * neg; 
+            var a = incoming.angle + (Math.PI / this.focalLength) * d * neg; 
             var dx = Math.cos(a);
             var dy = Math.sin(a);
 
