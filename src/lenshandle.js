@@ -27,8 +27,8 @@
                 this.alpha = 0.8;
             } else {
                 this.hover = false;
-            }   
-           
+            }
+
             if (this.hover && inp.isDown(inp.LEFT_MOUSE)){
                 this.clicked = true;
 
@@ -48,7 +48,6 @@
             if (this.alpha < 0.15){
                 this.alpha = 0.15;
             }
-            console.log(this);
         },
 
         draw: function(ctx) {
@@ -67,6 +66,6 @@
             );
             ctx.stroke();
         }
-    }; 
+    };
 
 })(window);

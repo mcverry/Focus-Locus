@@ -7,11 +7,11 @@
 
         this.focalLength = 40;
         this.focalLights = [];
-        
-        this.light = this.game.coq.entities.create(Light, 
-            {center : this.center, 
-             color : "rgba(255, 0, 0, 0.3)", 
-             radial : true, 
+
+        this.light = this.game.coq.entities.create(Light,
+            {center : this.center,
+             color : "rgba(255, 0, 0, 0.3)",
+             radial : true,
              rays : [],
              source : this});
         this.rays = [];
@@ -20,40 +20,39 @@
 
     exports.Lens.prototype = {
         refract: function(incoming, point){
-          
+
             var neg = -1;
             var dir = Math.atan2(point.y - this.center.y, point.x - this.center.x);
             if (dir < 0){
                 neg = 1;
             }
             var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y, 2));
-            console.log(dir);
             d = 2 * (d / this.size.x);
-            var a = incoming.angle + (Math.PI / 8) * d * neg; 
+            var a = incoming.angle + (Math.PI / 8) * d * neg;
             var dx = Math.cos(a);
             var dy = Math.sin(a);
 
             var ray = {
-                angle : a, 
+                angle : a,
                 x1 : point.x,
                 y1 : point.y,
                 x2 : point.x + dx,
                 y2 : point.y + dy,
                 strength : incoming.strength - 1
             };
-            
+
             if (ray.strength > 0) {
                 this.light.rays.push(ray);
             }
         },
-        
+
         update: function() {
             this.center.y += this.bounce;
-            if (this.center.y > 200) {
-                this.center.y = 200;
+            if (this.center.y > 600) {
+                this.center.y = 600;
                 this.bounce *= -1;
-            } else if (this.center.y < 100) {
-                this.center.y = 100;
+            } else if (this.center.y < 0) {
+                this.center.y = 0;
                 this.bounce *= -1;
             }
 

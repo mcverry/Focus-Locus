@@ -20,7 +20,6 @@
         this.loaded = false;
 
         loadSprites(options.sprite || "./res/img/spritesheet_earth.png", function(sprites) {
-            console.log(sprites);
             this.sprites = sprites;
             this.loaded = true;
         }.bind(this));
