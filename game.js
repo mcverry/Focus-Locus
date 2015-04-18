@@ -3,6 +3,8 @@ var Game = function() {
 
     this.sunA = this.coq.entities.create(Light, {center : {x : 100, y : 100}, color : "rgba(255, 0, 0, 0.3)"});
 
+    this.worldA = this.coq.entities.create(World, {center : {x : 100, y: 150}, sun : this.sunA});
+
     this.lensA = this.coq.entities.create(Lens, {center: {x: 300, y : 100}});
     //this.lensB = this.coq.entities.create(Lens, {center: {x: 500, y : 100}});
 
