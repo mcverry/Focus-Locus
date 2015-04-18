@@ -89,8 +89,10 @@
             //draw polygon
             var i;
 
-            ctx.strokeStyle = "white";
+            ctx.strokeStyle = this.color;
             ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
+
+            ctx.beginPath();
 
             if (this.radial) {
                 for (i = 0; i < this.intersects.length; i++) {

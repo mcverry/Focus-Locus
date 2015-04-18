@@ -85,20 +85,12 @@
 
         },
         draw : function(ctx) {
-            ctx.strokeStyle = "white";
-            ctx.beginPath();
-            ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
-            ctx.stroke();
+            // ctx.strokeStyle = "white";
+            // ctx.beginPath();
+            // ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+            // ctx.stroke();
             //draw points
-            if (this.lt) {
-                ctx.strokeStyle = this.color;
-                ctx.beginPath();
-                ctx.moveTo(this.lt[0].x, this.lt[0].y);
-                for (var i = 1; i < this.lt.length; i++) {
-                    ctx.lineTo(this.lt[i].x, this.lt[i].y);
-                }
-                ctx.stroke();
-            }
+            //ctx.beginPath();
         },
         getFocusPoint : function(source) {
             var lightDist = Math.sqrt(Math.pow(this.center.x - source.center.x, 2) + Math.pow(this.center.y - source.center.y, 2));

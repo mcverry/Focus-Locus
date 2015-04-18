@@ -1,19 +1,29 @@
 var Game = function() {
     this.coq = new Coquette(this, "canvas", 800, 600, "#111");
 
-    this.sunA = this.coq.entities.create(Light, {center : {x : 150, y : 300}, color : "rgba(255, 0, 0, 0.3)"});
+    this.scriptState = "titleScreen";
+    this.oldScriptState = "";
+    this.frame = 0;
 
-    this.worldA = this.coq.entities.create(World, {center : {x : 150, y: 400}, sun : this.sunA, zindex : 10});
-
-    this.lensA = this.coq.entities.create(Lens, {center: {x: 300, y : 100}});
-    this.lensB = this.coq.entities.create(Lens, {center: {x: 400, y : 200}});
-    this.lensC = this.coq.entities.create(Lens, {center: {x: 500, y : 300}});
-    this.lensD = this.coq.entities.create(Lens, {center: {x: 600, y : 400}});
-    this.lensE = this.coq.entities.create(Lens, {center: {x: 700, y : 500}});
-
-
-    //this.sunB = this.coq.entities.create(Light, {center : {x : 220, y : 220}, color : "rgba(0, 255, 0, 0.3)"});
-
+    this.update = function () {
+        if (this.scriptState != this.oldScriptState) {
+            if (Script[this.oldScriptState]) {
+                if (Script[this.oldScriptState].teardown) {
+                    Script[this.oldScriptState].teardown.call(this);
+                }
+            }
+            if (Script[this.scriptState]) {
+                if (Script[this.scriptState].setup) {
+                    Script[this.scriptState].setup.call(this);
+                }
+            }
+            this.oldScriptState = this.scriptState;
+        }
+        if (Script[this.scriptState]) {
+            Script[this.scriptState].update(this.frame);
+        }
+        this.frame += 1;
+    };
 };
 
 window.addEventListener('load', function() {
