@@ -7,7 +7,7 @@
         this.center = options.center;
         this.color = options.color || "white";
         this.strength = options.strength || 5;
-        this.numRays = options.numRays || 100;
+        this.numRays = options.numRays || 50;
         this.intersects = [];
     };
 
