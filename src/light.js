@@ -2,7 +2,6 @@
 
     exports.Light = function(game, options) {
 
-        console.log("created light");
         this.game = game;
 
         this.center = options.center;
@@ -22,9 +21,9 @@
     };
 
     exports.Light.prototype = {
-        
-        makeRadial : function(n) {  
-         
+
+        makeRadial : function(n) {
+
             for(var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / n){
                 // Calculate dx & dy from angle
                 var dx = Math.cos(angle);
@@ -49,13 +48,9 @@
             this.game.coq.entities.all().forEach(function(ent) {
                 if (ent.getLightSegments) {
                     var seg =  ent.getLightSegments(this);
-                    
-                    console.log(seg[0].src);
-                    console.log(this.source);
+
                     if (seg[0].src != this.source){
                         segments = segments.concat(seg);
-                    } else {
-                        console.log("not targeting self");
                     }
                 }
             }.bind(this));
@@ -80,8 +75,8 @@
                     }
                 }
 
-                if (closestIntersect.segment.src){
-                    closestIntersect.segment.src.refract(this.rays[j], closestIntersect)
+                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Lens){
+                    closestIntersect.segment.src.refract(this.rays[j], closestIntersect);
                 }
 
                 // Add to list of intersects
@@ -109,8 +104,8 @@
                 }
             }
             ctx.stroke();
-            
-            //clear out dynamic lighting 
+
+            //clear out dynamic lighting
             if (this.radial) {
                 this.rays = [];
             }
@@ -159,7 +154,7 @@
             x: rpx + rdx * T1,
             y: rpy + rdy * T1,
             param: T1,
-            segment: seg 
+            segment: seg
         };
     };
 })(this);

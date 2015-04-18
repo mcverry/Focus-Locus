@@ -1,11 +1,31 @@
 ;(function(exports) {
 
+     var loadSprites = function(spriteSheetURL, callback) {
+        var image = new Image();
+        image.onload = function() {
+            callback.call(this, image);
+        };
+        image.src = spriteSheetURL;
+    };
+
     exports.World = function(game, options) {
         this.game = game;
         this.center = options.center || {
             x : 150,
             y : 150
         };
+
+        this.loaded = false;
+
+        loadSprites(options.sprite || "./res/img/spritesheet_earth.png", function(sprites) {
+            console.log(sprites);
+            this.sprites = sprites;
+            this.loaded = true;
+        }.bind(this));
+
+        this.numSprites = 36;
+        this.currentSprite = 0;
+        this.spriteSize = {x : 32, y : 32};
 
         this.size = options.size || {
             x : 5,
@@ -26,9 +46,22 @@
             this.center.y = this.sun.center.y + (dist * Math.sin(angle));
         },
         draw : function(ctx) {
+            if (!this.loaded) {
+                 return;
+            }
             ctx.fillStyle = "green";
             ctx.beginPath();
-            ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+            ctx.drawImage(
+                this.sprites,
+                0,
+                this.currentSprite * this.spriteSize.y,
+                this.spriteSize.x,
+                this.spriteSize.y,
+                this.spriteSize.x,
+                this.spriteSize.y,
+                this.center.x - this.size.x >> 1,
+                this.center.y - this.size.y >> 1
+            );
             ctx.fill();
         },
         getLightSegments : function(source) {
