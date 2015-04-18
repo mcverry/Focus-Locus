@@ -28,11 +28,8 @@
             }
             var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y, 2));
             d = 2 * (d / this.size.x);
-<<<<<<< HEAD
-            var a = incoming.angle + (Math.PI / 8) * d * neg;
-=======
-            var a = incoming.angle + (Math.PI / this.focalLength) * d * neg; 
->>>>>>> 8b4d7738cc30726e6dd9e06f75f2ec875721eae2
+
+            var a = incoming.angle + (Math.PI / this.focalLength) * d * neg;
             var dx = Math.cos(a);
             var dy = Math.sin(a);
 
