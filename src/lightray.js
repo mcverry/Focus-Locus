@@ -1,6 +1,7 @@
 ;(function(exports) {
 
-    exports.LightRay = function(options) {
+    exports.LightRay = function(game, options) {
+        this.game = game;
         this.source = options.source;
         this.dest = options.dest;
     };

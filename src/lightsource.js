@@ -1,7 +1,7 @@
 ;(function(exports) {
 
-    exports.LightSource = function(options) {
-        this.coq = options.coq;
+    exports.LightSource = function(game, options) {
+        this.game = game;
         this.size = options.size || {x : 10, y: 10};
 
         this.lightRays = {};
@@ -15,8 +15,13 @@
 
     exports.LightSource.prototype = {
         update  : function () {
-            var entities = this.coq.entities.all();
-
+            //this is awful
+            var entities = this.game.coq.entities.all();
+            for (var i = 0; i < entities.length; i++) {
+                if (entities[i].getLightPoints && !(entities[i] in this.lightRays)) {
+                    this.registerObject(entities[i]);
+                }
+            }
         },
         draw : function (ctx) {
             ctx.fillStyle = "red";
@@ -26,7 +31,7 @@
             if (obj.getLightPoints) {
                 for (var i = 0; i < obj.getLightPoints().length; i++) {
                     this.lightRays.push(
-                        this.coq.elements.create(LightRay, {source :this, dest : obj.getLightPoints()[i]})
+                        this.game.coq.elements.create(LightRay, {source :this, dest : obj.getLightPoints()[i]})
                     );
                 }
             }

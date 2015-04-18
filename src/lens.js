@@ -1,6 +1,6 @@
 ;(function(exports) {
-    exports.Lens = function(options) {
-        this.coq = options.coq;
+    exports.Lens = function(game, options) {
+        this.game = game;
 
         this.pos = options.pos || {x : 200, y: 200};
         this.size = options.size || {x : 20, y : 100};
