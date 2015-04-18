@@ -2,23 +2,61 @@
 
     exports.Light = function(game, options) {
 
+        console.log("created light");
         this.game = game;
 
         this.center = options.center;
         this.color = options.color || "white";
         this.strength = options.strength || 5;
-        this.numRays = options.numRays || 100;
         this.intersects = [];
+
+        this.radial = options.radial || false
+        this.source = options.source || null;
+
+        this.rays = [];
+        if (! options.rays) {
+            this.makeRadial(options.numRays || 100);
+        } else {
+            this.rays = options.rays;
+        }
     };
 
     exports.Light.prototype = {
+        
+        makeRadial : function(n) {  
+         
+            for(var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / n){
+                // Calculate dx & dy from angle
+                var dx = Math.cos(angle);
+                var dy = Math.sin(angle);
+
+                var ray = {
+                        angle : angle,
+                        x1 : this.center.x,
+                        y1 : this.center.y,
+                        x2 : this.center.x + dx,
+                        y2 : this.center.y + dy,
+                        strength : this.strength
+                };
+                this.rays.push(ray);
+            }
+        },
+
         update : function() {
             this.intersects = [];
             var segments = [];
 
             this.game.coq.entities.all().forEach(function(ent) {
                 if (ent.getLightSegments) {
-                    segments = segments.concat(ent.getLightSegments(this));
+                    var seg =  ent.getLightSegments(this);
+                    
+                    console.log(seg[0].src);
+                    console.log(this.source);
+                    if (seg[0].src != this.source){
+                        segments = segments.concat(seg);
+                    } else {
+                        console.log("not targeting self");
+                    }
                 }
             }.bind(this));
 
@@ -29,19 +67,8 @@
             segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0, src : false});
 
 
-            for(var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / this.numRays){
-
-                // Calculate dx & dy from angle
-                var dx = Math.cos(angle);
-                var dy = Math.sin(angle);
-
-                var ray = {
-                        x1 : this.center.x,
-                        y1 : this.center.y,
-                        x2 : this.center.x + dx,
-                        y2 : this.center.y + dy
-                };
-
+            for(var j = 0; j < this.rays.length; j++){
+                ray = this.rays[j];
                 // Find CLOSEST intersection
                 var closestIntersect = null;
 
@@ -53,10 +80,13 @@
                     }
                 }
 
+                if (closestIntersect.segment.src){
+                    closestIntersect.segment.src.refract(this.rays[j], closestIntersect)
+                }
+
                 // Add to list of intersects
                 this.intersects.push(closestIntersect);
             }
-
         },
 
         draw : function(ctx) {
@@ -67,11 +97,23 @@
             ctx.strokeStyle = "white";
             ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
 
-            for (i = 0; i < this.intersects.length; i++) {
-                ctx.moveTo(this.center.x, this.center.y);
-                ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+            if (this.radial) {
+                for (i = 0; i < this.intersects.length; i++) {
+                    ctx.moveTo(this.rays[i].x1, this.rays[i].y1);
+                    ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+                }
+            } else {
+                for (i = 0; i < this.intersects.length; i++) {
+                    ctx.moveTo(this.center.x, this.center.y);
+                    ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+                }
             }
             ctx.stroke();
+            
+            //clear out dynamic lighting 
+            if (this.radial) {
+                this.rays = [];
+            }
         }
     };
 
@@ -116,7 +158,8 @@
         return {
             x: rpx + rdx * T1,
             y: rpy + rdy * T1,
-            param: T1
+            param: T1,
+            segment: seg 
         };
     };
 })(this);

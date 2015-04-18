@@ -7,11 +7,37 @@
 
         this.focalLength = 40;
         this.focalLights = [];
-
+        
+        this.light = this.game.coq.entities.create(Light, 
+            {center : this.center, 
+             color : "rgba(255, 0, 0, 0.3)", 
+             radial : true, 
+             rays : [],
+             source : this});
+        this.rays = [];
         this.bounce = 1;
     };
 
     exports.Lens.prototype = {
+        refract: function(incoming, point){
+            var a = incoming.angle + 1;
+            var dx = Math.cos(a);
+            var dy = Math.sin(a);
+
+            var ray = {
+                angle : a, 
+                x1 : point.x,
+                y1 : point.y,
+                x2 : point.x + dx,
+                y2 : point.y + dy,
+                strength : incoming.strength - 1
+            };
+            
+            if (ray.strength > 0) {
+                this.light.rays.push(ray);
+            }
+        },
+        
         update: function() {
             this.center.y += this.bounce;
             if (this.center.y > 200) {
