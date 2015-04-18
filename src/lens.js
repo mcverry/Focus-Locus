@@ -7,7 +7,7 @@
 
         this.focalLength = 16;
         this.focalLights = [];
-
+        this.mirrormode = false;
         this.light = this.game.coq.entities.create(Light,
             {center : this.center,
              color : "rgba(255, 0, 0, 0.3)",
@@ -30,6 +30,12 @@
             d = 2 * (d / this.size.x);
 
             var a = incoming.angle + (Math.PI / this.focalLength) * d * neg;
+            
+            if (this.mirrormode) {
+                console.log("mirror mode", this.mirrormode);
+                a += Math.PI;
+            }
+
             var dx = Math.cos(a);
             var dy = Math.sin(a);
 
@@ -48,6 +54,21 @@
         },
 
         update: function() {
+
+            var inp = this.game.coq.inputter;
+           
+            if (inp.isDown(inp.UP_ARROW)){
+                this.focalLength += 1
+            }
+            if (inp.isDown(inp.DOWN_ARROW)){
+                this.focalLength -= 1;
+            }
+            this.mirrormode = false;
+            if (this.focalLength <= 0){
+                this.mirrormode = true;
+            }
+
+
             this.center.y += this.bounce;
             if (this.center.y > 600) {
                 this.center.y = 600;
