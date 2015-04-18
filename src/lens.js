@@ -27,7 +27,6 @@
                 neg = 1;
             }
             var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y, 2));
-            console.log(dir);
             d = 2 * (d / this.size.x);
             var a = incoming.angle + (Math.PI / 8) * d * neg; 
             var dx = Math.cos(a);
