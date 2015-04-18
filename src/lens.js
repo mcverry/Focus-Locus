@@ -30,9 +30,8 @@
             d = 2 * (d / this.size.x);
 
             var a = incoming.angle + (Math.PI / this.focalLength) * d * neg;
-            
+
             if (this.mirrormode) {
-                console.log("mirror mode", this.mirrormode);
                 a += Math.PI;
             }
 
@@ -56,7 +55,7 @@
         update: function() {
 
             var inp = this.game.coq.inputter;
-           
+
             if (inp.isDown(inp.UP_ARROW)){
                 this.focalLength += 1
             }
