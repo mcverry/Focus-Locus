@@ -20,7 +20,10 @@
 
     exports.Lens.prototype = {
         refract: function(incoming, point){
-            var a = incoming.angle + 1;
+           
+            var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y));
+            d = 2 * (d / this.size.x);
+            var a = incoming.angle + (Math.PI * d)
             var dx = Math.cos(a);
             var dy = Math.sin(a);
 

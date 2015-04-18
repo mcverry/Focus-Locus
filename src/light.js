@@ -81,7 +81,7 @@
                 }
 
                 if (closestIntersect.segment.src){
-                    closestIntersect.segment.src.refract(this.rays[j], closestIntersect)
+                    closestIntersect.segment.src.refract(this.rays[j], closestIntersect);
                 }
 
                 // Add to list of intersects
