@@ -1,9 +1,9 @@
 ;(function(exports) {
 
-    exports.Asteroid = function(options){
-        this.coq = options.coq;
+    exports.Asteroid = function(game, options){
+        this.coq = game.coq;
         this.size = options.size || {x : 10, y : 10};
-        console.log(options);
+        console.log("a", options);
         this.center = options.center || {
             x: this.size.x >> 1,
             y: this.size.y >> 1
