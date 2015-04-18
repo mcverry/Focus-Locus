@@ -1,38 +1,25 @@
 ;(function(exports){
 
-    var dist = function(a, b) {
-        return Math.sqrt(
-            Math.pow((a.x || a.x1) - (b.x || b.x1), 2) +
-            Math.pow((a.y || a.y1) - (b.y || b.y1), 2)
-        );
-    };
-
     exports.Light = function(game, options) {
 
         this.game = game;
 
-        this.parent = options.parent || null;
-
         this.center = options.center;
         this.color = options.color || "white";
-
+        this.strength = options.strength || 5;
+        this.numRays = options.numRays || 100;
         this.intersects = [];
-
-        this.maxDistance = 1000;
     };
 
     exports.Light.prototype = {
         update : function() {
-            var self = this;
+            this.intersects = [];
             var segments = [];
+
             this.game.coq.entities.all().forEach(function(ent) {
                 if (ent.getLightSegments) {
-                    segments = segments.concat(ent.getLightSegments(self));
+                    segments = segments.concat(ent.getLightSegments(this));
                 }
-            });
-
-            segments = segments.filter(function(seg) {
-                return Math.sqrt(Math.pow(this.center.x - seg.x1, 2) + Math.pow(this.center.y - seg.y1, 2)) < this.maxDistance;
             }.bind(this));
 
             //add outside of box
@@ -41,75 +28,35 @@
             segments.push({x1 : 800, y1 : 600, x2 : 0, y2: 600, src : false});
             segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0, src : false});
 
-            var points = boxSegmentsToPoints(segments);
-            var angles = this.getAllAngles(points);
 
-            if (this.parent) {
-                var d1 = Math.asin(dist(this.parent.center, this.center) / dist(this.parent.getLightSegments(this)[0], this.center));
-                var d2 = Math.asin(dist(this.parent.center, this.center) / dist(this.parent.getLightSegments(this)[1], this.center));
-                angles = angles.filter(function(angle) {
-                    alpha = Math.PI - angle;
-                    if (angle > alpha && angle < alpha + d1) {
-                        return true;
-                    }
-                    if (angle < alpha + (Math.PI * 2) - d2 && angle < alpha + (Math.PI/2) - d2) {
-                        return true;
-                    }
-                    if (angle > alpha + Math.PI - d2 && angle < alpha + Math.PI + d1) {
-                        return true;
-                    }
-                    return false;
-                });
-            }
+            for(var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / this.numRays){
 
-            this.getSortedIntersects(angles, segments);
-        },
+                // Calculate dx & dy from angle
+                var dx = Math.cos(angle);
+                var dy = Math.sin(angle);
 
-        getSortedIntersects : function(angles, segments) {
-            var i, j, dx, dy, ray, closest, intersect;
-            this.intersects = [];
-            for(i = 0; i < angles.length; i++) {
-                dx = Math.cos(angles[i]);
-                dy = Math.sin(angles[i]);
-
-                ray = {
-                    x1: this.center.x,
-                    y1: this.center.y,
-                    x2: this.center.x + dx,
-                    y2: this.center.y + dy
+                var ray = {
+                        x1 : this.center.x,
+                        y1 : this.center.y,
+                        x2 : this.center.x + dx,
+                        y2 : this.center.y + dy
                 };
 
-                closest = null;
-                for (j = 0; j < segments.length; j++) {
-                    intersect = getIntersection(ray, segments[j]);
-                    if (!intersect) continue;
-                    if (!closest || intersect.param < closest.param) {
-                        closest = intersect;
+                // Find CLOSEST intersection
+                var closestIntersect = null;
+
+                for(var i = 0; i < segments.length; i++){
+                    var intersect = getIntersection(ray, segments[i]);
+                    if(!intersect) continue;
+                    if(!closestIntersect || intersect.param < closestIntersect.param){
+                        closestIntersect = intersect;
                     }
                 }
 
-                if (!closest) continue;
-                closest.angle = angles[i];
-
-                this.intersects.push(closest);
+                // Add to list of intersects
+                this.intersects.push(closestIntersect);
             }
 
-            this.intersects = pareIntersects(this.intersects);
-
-            this.intersects = this.intersects.sort(function(a,b) {
-                return a.angle - b.angle;
-            });
-        },
-
-        getAllAngles : function(points) {
-            var i, angles = [];
-            for (i = 0; i < points.length; i++) {
-                var angle = Math.atan2(points[i].y - this.center.y,
-                    points[i].x - this.center.x);
-                points[i].angle = angle;
-                angles.push(angle - 0.00001, angle, angle + 0.00001);
-            }
-            return angles;
         },
 
         draw : function(ctx) {
@@ -117,45 +64,15 @@
             //draw polygon
             var i;
 
-            ctx.fillStyle = "white";
+            ctx.strokeStyle = "white";
             ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
 
-            ctx.fillStyle = this.color;
-            ctx.moveTo(this.intersects[0].x, this.intersects[0].y);
-            ctx.fillRect(this.intersects[0].x, this.intersects[0].y, 3, 3);
             for (i = 0; i < this.intersects.length; i++) {
+                ctx.moveTo(this.center.x, this.center.y);
                 ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
-                ctx.fillRect(this.intersects[i].x, this.intersects[i].y, 3, 3);
             }
-            ctx.closePath();
-            ctx.fill();
+            ctx.stroke();
         }
-    };
-
-    var pareIntersects = function(intersects) {
-        var set = {};
-        return intersects.filter(function(i) {
-            var key = (i.x | 0) + "," + (i.y | 0);
-            if (key in set) {
-                return false;
-            } else {
-                set[key] = true;
-                return true;
-            }
-        });
-    };
-
-    var boxSegmentsToPoints = function(segArr) {
-        var points = [];
-
-        segArr.forEach(function(seg) {
-            points.push({
-                x: seg.x1,
-                y: seg.y1
-            });
-        });
-
-        return points;
     };
 
     var getIntersection = function(ray, seg) {
@@ -184,10 +101,17 @@
         }
         var T2 = (rdx * (spy - rpy) + rdy * (rpx - spx)) /
             (sdx * rdy - sdy * rdx);
+        if (rdx === 0) {
+            rdx = 0.000001;
+        }
         var T1 = (spx + sdx * T2 - rpx) / rdx;
 
-        if(T1 < 0) return null;
-        if(T2 < 0 || T2 > 1) return null;
+        if(T1 < 0) {
+            return null;
+        }
+        if(T2 < 0 || T2 > 1) {
+            return null;
+        }
 
         return {
             x: rpx + rdx * T1,

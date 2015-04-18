@@ -24,24 +24,9 @@
 
             //grab new lights
             var self = this;
-            self.game.coq.entities.all(Light).filter(function(light) {
-                for (var i = 0; i < self.focalLights.length; i++) {
-                    if (self.focalLights[i].source === light || self.focalLights[i].parent === self) {
-                        return false;
-                    }
-                }
-                return true;
-            }).forEach(function(light) {
-                self.focalLights.push({
-                    source : light,
-                    focalLight : self.game.coq.entities.create(Light, {parent : self, color : "rgba(100, 0, 0, 0.1)"})
-                });
-            });
 
             //update existing lights
-            for(var i = 0; i < this.focalLights.length; i++) {
-                this.focalLights[i].focalLight.center = this.getFocusPoint(this.focalLights[i].source);
-            }
+
         },
         draw : function(ctx) {
             ctx.strokeStyle = "white";
