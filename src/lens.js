@@ -3,7 +3,7 @@
         this.game = game;
 
         this.center = options.center || {x : 500, y: 100};
-        this.size = options.size || {x : 40, y : 40};
+        this.size = options.size || {x : 30, y : 30};
 
         this.focalLength = 16;
         this.focalLights = [];
@@ -23,9 +23,11 @@
 
             var neg = -1;
             var dir = Math.atan2(point.y - this.center.y, point.x - this.center.x);
+
             if (dir < 0){
                 neg = 1;
             }
+
             var d = Math.sqrt(Math.pow(point.x - this.center.x, 2) + Math.pow(point.y - this.center.y, 2));
             d = 2 * (d / this.size.x);
 
@@ -57,26 +59,27 @@
 
             var inp = this.game.coq.inputter;
 
-            if (inp.isDown(inp.UP_ARROW)){
-                this.focalLength += 1
+            if (inp.isDown(inp.UP_ARROW)) {
+                this.center.y -= 3;
             }
-            if (inp.isDown(inp.DOWN_ARROW)){
-                this.focalLength -= 1;
+            if (inp.isDown(inp.DOWN_ARROW)) {
+                this.center.y += 3;
             }
-            this.mirrormode = false;
-            if (this.focalLength <= 0){
-                this.mirrormode = true;
-            }
-
-
-            this.center.y += this.bounce;
             if (this.center.y > 600) {
                 this.center.y = 600;
-                this.bounce *= -1;
             } else if (this.center.y < 0) {
                 this.center.y = 0;
-                this.bounce *= -1;
             }
+
+            if (inp.isDown(inp.LEFT_ARROW)){
+                this.focalLength -= 1;
+            }
+            if (inp.isDown(inp.RIGHT_ARROW)){
+                this.focalLength += 1;
+            }
+
+            this.mirrormode = this.focalLength <= 0;
+
 
             //grab new lights
             var self = this;
@@ -85,12 +88,12 @@
 
         },
         draw : function(ctx) {
-            // ctx.strokeStyle = "white";
-            // ctx.beginPath();
-            // ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
-            // ctx.stroke();
-            //draw points
-            //ctx.beginPath();
+            if (this.game.debugMode) {
+                ctx.strokeStyle = "white";
+                ctx.beginPath();
+                ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+                ctx.stroke();
+            }
         },
         getFocusPoint : function(source) {
             var lightDist = Math.sqrt(Math.pow(this.center.x - source.center.x, 2) + Math.pow(this.center.y - source.center.y, 2));

@@ -5,7 +5,9 @@ var Game = function() {
     this.oldScriptState = "";
     this.frame = 0;
 
-    this.update = function () {
+    this.debugMode = false;
+
+    this.update = function() {
         if (this.scriptState != this.oldScriptState) {
             if (Script[this.oldScriptState]) {
                 if (Script[this.oldScriptState].teardown) {
@@ -20,9 +22,19 @@ var Game = function() {
             this.oldScriptState = this.scriptState;
         }
         if (Script[this.scriptState]) {
-            Script[this.scriptState].update(this.frame);
+            if (Script[this.scriptState].update) {
+                Script[this.scriptState].update.call(this, this.frame);
+            }
         }
         this.frame += 1;
+    };
+
+    this.draw = function(ctx) {
+        if (Script[this.scriptState]) {
+            if (Script[this.scriptState].draw) {
+                Script[this.scriptState].draw.call(this, ctx);
+            }
+        }
     };
 };
 

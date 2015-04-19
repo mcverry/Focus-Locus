@@ -6,11 +6,14 @@
 
         this.center = options.center;
         this.color = options.color || "white";
-        this.strength = options.strength || 5;
+        this.strength = options.strength || 6;
         this.intersects = [];
 
-        this.radial = options.radial || false
+        this.radial = options.radial || false;
         this.source = options.source || null;
+
+        this.startAngle = options.startAngle % (Math.PI * 2) || 0;
+        this.endAngle = options.endAngle % (Math.PI * 2) || Math.PI * 2;
 
         this.rays = [];
         if (! options.rays) {
@@ -24,7 +27,13 @@
 
         makeRadial : function(n) {
 
-            for(var angle = 0; angle < Math.PI * 2; angle += (Math.PI * 2) / n){
+            if (this.startAngle > this.endAngle) {
+                var temp = this.startAngle;
+                this.startAngle = this.endAngle;
+                this.endAngle = temp;
+            }
+
+            for(var angle = this.startAngle; angle < this.endAngle; angle += (this.endAngle - this.startAngle) / n){
                 // Calculate dx & dy from angle
                 var dx = Math.cos(angle);
                 var dy = Math.sin(angle);
@@ -90,8 +99,11 @@
             //draw polygon
             var i;
 
-            ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
+            if (this.game.debugMode) {
+                ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
+            }
 
+            ctx.lineWidth = 20;
 
             if (this.radial) {
                 for (i = 0; i < this.intersects.length; i++) {
