@@ -4,7 +4,7 @@ window.Script = {
             this.sunA = this.coq.entities.create(Light, {
                 center : {x : 150, y : 200},
                 color : "rgba(255, 0, 0, 0.3)",
-                numRays : 70,
+                numRays : 10,
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8
             });
@@ -12,7 +12,7 @@ window.Script = {
             this.sunB = this.coq.entities.create(Light, {
                 center : {x : 150, y : 400},
                 color : "rgba(0, 255, 0, 0.3)",
-                numRays : 70,
+                numRays : 10,
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8
             });

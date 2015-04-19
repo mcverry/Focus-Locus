@@ -66,10 +66,11 @@
             }.bind(this));
 
             //add outside of box
-            segments.push({x1 : 0, y1 : 0, x2 : 800, y2: 0, src: false});
-            segments.push({x1 : 800, y1 : 0, x2 : 800, y2: 600, src : false});
-            segments.push({x1 : 800, y1 : 600, x2 : 0, y2: 600, src : false});
-            segments.push({x1 : 0, y1 : 600, x2 : 0, y2: 0, src : false});
+            var buffer = 10;
+            segments.push({x1 : -buffer, y1 : -buffer, x2 : 800 + buffer, y2: -buffer, src: false});
+            segments.push({x1 : 800 + buffer, y1 : -buffer, x2 : 800 + buffer, y2: 600 + buffer, src : false});
+            segments.push({x1 : 800 + buffer, y1 : 600 + buffer, x2 : -buffer, y2: 600 + buffer, src : false});
+            segments.push({x1 : -buffer, y1 : 600 + buffer, x2 : -buffer, y2: -buffer, src : false});
 
 
             for(var j = 0; j < this.rays.length; j++){
