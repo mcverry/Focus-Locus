@@ -21,12 +21,19 @@
         } else {
             this.rays = options.rays;
         }
+
+        if (options.sprite){
+            var loading = new Image();
+            loading.onload = function() {
+                this.sprite = loading;
+            }.apply(this);
+            loading.src = options.sprite;
+        }
     };
 
     exports.Light.prototype = {
 
         makeRadial : function(n) {
-
             if (this.startAngle > this.endAngle) {
                 var temp = this.startAngle;
                 this.startAngle = this.endAngle;
@@ -72,7 +79,6 @@
             segments.push({x1 : 800 + buffer, y1 : 600 + buffer, x2 : -buffer, y2: 600 + buffer, src : false});
             segments.push({x1 : -buffer, y1 : 600 + buffer, x2 : -buffer, y2: -buffer, src : false});
 
-
             for(var j = 0; j < this.rays.length; j++){
                 ray = this.rays[j];
                 // Find CLOSEST intersection
@@ -86,8 +92,12 @@
                     }
                 }
 
-                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Lens){
+                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Lens) {
                     closestIntersect.segment.src.refract(this.rays[j], closestIntersect);
+                }
+
+                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Asteroid) {
+                    closestIntersect.segment.src.damage(1);
                 }
 
                 // Add to list of intersects
@@ -127,6 +137,20 @@
             //clear out dynamic lighting
             if (this.radial) {
                 this.rays = [];
+            }
+
+            if (this.sprite) {
+                ctx.drawImage(
+                    this.sprite,
+                    0,
+                    0,
+                    this.sprite.width,
+                    this.sprite.height,
+                    this.center.x - (this.sprite.width),
+                    this.center.y - (this.sprite.height >> 1),
+                    this.sprite.width,
+                    this.sprite.height
+                );
             }
         }
     };
