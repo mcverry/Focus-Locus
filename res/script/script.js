@@ -1,3 +1,65 @@
+
+window.ScriptUtil = {
+
+    newVideoTransition : function(videoid, nextstate) {
+
+    return  {
+            setup : window.ScriptUtil.videoTransitionSetup(videoid),
+            draw : window.ScriptUtil.videoTransitionDraw(),
+            update : window.ScriptUtil.videoTransitionUpdate(nextstate)
+        }; 
+    },
+
+    videoTransitionDraw : function() {
+        return function(ctx) {
+            if (this.video) { 
+                if (this.video.currentTime > this.video.duration - 1){
+                    this.viddraw.y += 4;
+                    this.viddraw.h -= 8;
+                    if (this.audio.static.paused && !this.audioplayed.static) {
+                        this.audioplayed.static = true;
+                        this.audio.static.play()
+                    }
+                }
+                if (this.viddraw.h <= 0) {
+                    this.viddraw.h = 0;
+                }
+                
+                ctx.drawImage(this.video, this.viddraw.x,  this.viddraw.y, this.viddraw.w, this.viddraw.h);
+            }
+        }
+    },
+
+    videoTransitionSetup : function(videoid) {
+        return function() {
+            console.log(this);
+            this.video = this.myLoader.getFile(videoid);
+            this.audio = {};
+            this.audio["static"] = this.myLoader.getFile("static");
+            this.audioplayed = {};
+            this.audioplayed["static"] = false;
+            this.video.play();
+           
+            var ctx = this.coq.renderer._ctx;
+            this.viddraw = {
+                    w : this.video.videoWidth,
+                    h : this.video.videoHeight,
+                    x : (ctx.canvas.width - this.video.videoWidth) / 2,
+                    y : (ctx.canvas.height - this.video.videoHeight) / 2
+            }
+        }
+    },
+ 
+    videoTransitionUpdate : function(nextstate) {
+        return function() {
+            if (this.video.ended) {
+               this.scriptState = nextstate;
+            }
+        }
+    }
+
+};
+
 window.Script = {
     loading : {
         setup : function() {
@@ -45,7 +107,6 @@ window.Script = {
             });
         },
         teardown : function() {
-            this.focusSplash = null;
             this.coq.entities.all().forEach(function(entity) {
                 this.coq.entities.destroy(entity);
             }.bind(this));
@@ -64,47 +125,9 @@ window.Script = {
 
         }
     },
-    welcome : {
-        setup : function(){
-            this.video = this.myLoader.getFile("welcome");
-            this.audio = {};
-            this.audio["static"] = this.myLoader.getFile("static");
-
-            this.video.play();
-           
-            var ctx = this.coq.renderer._ctx;
-            this.viddraw = {
-                    w : this.video.videoWidth,
-                    h : this.video.videoHeight,
-                    x : (ctx.canvas.width - this.video.videoWidth) / 2,
-                    y : (ctx.canvas.height - this.video.videoHeight) / 2
-            }
-        },
-
-        draw : function(ctx) { 
-            if (this.video) { 
-                if (this.video.currentTime > 1) {
-                //if (this.video.currentTime > this.video.duration - 1){
-                    this.viddraw.y += 4;
-                    this.viddraw.h -= 8;
-                    if (this.audio.static.paused) {
-                        this.audio.static.play()
-                    }
-                }
-                if (this.viddraw.h <= 0) {
-                    this.viddraw.h = 0;
-                }
-                
-                ctx.drawImage(this.video, this.viddraw.x,  this.viddraw.y, this.viddraw.w, this.viddraw.h);
-            }
-        },
-
-        update : function() {
-            if (this.video.ended) {
-                this.scriptState = "intro";
-            }
-        }
-    },
+    
+    welcome : ScriptUtil.newVideoTransition('welcome', 'intro'),
+    
     intro : {
         setup : function() {
             this.coq.entities.create(Light, {
