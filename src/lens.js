@@ -5,6 +5,8 @@
         this.center = options.center || {x : 500, y: 100};
         this.size = options.size || {x : 30, y : 30};
 
+        this.movement = options.movement || 0;
+
         this.focalLength = 16;
         this.focalLights = [];
         this.mirrormode = false;
@@ -59,11 +61,20 @@
 
             var inp = this.game.coq.inputter;
 
-            if (inp.isDown(inp.UP_ARROW)) {
-                this.center.y -= 3;
-            }
-            if (inp.isDown(inp.DOWN_ARROW)) {
-                this.center.y += 3;
+            if (this.movement) {
+                if (inp.isDown(this.movement.up.key)) {
+                    this.center.y -= this.movement.up.speed;
+                }
+                if (inp.isDown(this.movement.down.key)) {
+                    this.center.y += this.movement.down.speed;
+                }
+                if (inp.isDown(this.movement.left.key)){
+                    this.focalLength -= this.movement.left.speed;
+                }
+                if (inp.isDown(this.movement.right.key)){
+                    this.focalLength += this.movement.right.speed;
+                }
+
             }
             if (this.center.y > 600) {
                 this.center.y = 600;
@@ -71,12 +82,7 @@
                 this.center.y = 0;
             }
 
-            if (inp.isDown(inp.LEFT_ARROW)){
-                this.focalLength -= 1;
-            }
-            if (inp.isDown(inp.RIGHT_ARROW)){
-                this.focalLength += 1;
-            }
+
 
             this.mirrormode = this.focalLength <= 0;
 

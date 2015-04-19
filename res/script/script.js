@@ -83,7 +83,25 @@ window.Script = {
             });
 
             this.coq.entities.create(Lens, {
-                center: {x: 200, y : 200}
+                center: {x: 200, y : 200},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.UP_ARROW,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.DOWN_ARROW,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.LEFT_ARROW,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.RIGHT_ARROW,
+                        speed : 0.7
+                    }
+                }
             });
         },
         teardown : function() {
