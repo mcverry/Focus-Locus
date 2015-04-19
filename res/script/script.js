@@ -1,4 +1,12 @@
 window.Script = {
+    loading : {
+        setup : function() {
+            this.coq.entities.create(Splash, {
+                source : document.getElementById("focussplash"),
+                zindex : 2
+            });
+        }
+    },
     titleScreen : {
         setup : function() {
             this.coq.entities.create(Light, {
@@ -7,7 +15,7 @@ window.Script = {
                 numRays : 10,
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8,
-                sprite : "./res/img/hubble.png"
+                sprite : this.myLoader.getFile("res/img/hubble.png")
             });
 
             this.coq.entities.create(Light, {
@@ -16,7 +24,7 @@ window.Script = {
                 numRays : 10,
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8,
-                sprite : "./res/img/hubble.png"
+                sprite : this.myLoader.getFile("res/img/hubble.png")
             });
 
             this.coq.entities.create(Lens, {center: {x: 200, y : 200}});
@@ -32,7 +40,7 @@ window.Script = {
             this.coq.entities.create(Lens, {center: {x: 580, y : 400}});
 
             this.coq.entities.create(Splash, {
-                source : "./res/img/focus_splash.png",
+                source : this.myLoader.getFile('res/img/focus_splash.png'),
                 zindex : 2
             });
         },
@@ -64,22 +72,22 @@ window.Script = {
                 numRays : 30,
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8,
-                sprite : "./res/img/flashlight.png"
+                sprite : this.myLoader.getFile("res/img/flashlight.png")
             });
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 300, y : 400},
-                sprite : "./res/img/balloon_orange.png"
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png")
             });
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 450, y : 300},
-                sprite : "./res/img/balloon_orange.png"
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png")
             });
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 600, y : 400},
-                sprite : "./res/img/balloon_orange.png"
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png")
             });
 
             this.coq.entities.create(Lens, {

@@ -22,13 +22,7 @@
             this.rays = options.rays;
         }
 
-        if (options.sprite){
-            var loading = new Image();
-            loading.onload = function() {
-                this.sprite = loading;
-            }.apply(this);
-            loading.src = options.sprite;
-        }
+        this.sprite = options.sprite;
     };
 
     exports.Light.prototype = {

@@ -6,7 +6,7 @@ function getAssets(){
             'res/img/spritesheet_earth.png',
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
-            'res/img/hubble.png',
-            'res/vid/empire.mp4'
+            'res/img/hubble.png'
+ 
     ]   
 }

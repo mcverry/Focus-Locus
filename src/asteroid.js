@@ -14,13 +14,7 @@
         this.damageThreshold = options.damageThreshold || 5;
         this.healingFactor = options.healingFactor || 1;
 
-        if (options.sprite){
-            var loading = new Image();
-            loading.onload = function() {
-                this.sprite = loading;
-            }.apply(this);
-            loading.src = options.sprite;
-        }
+        this.sprite = options.sprite;
     };
 
     exports.Asteroid.prototype = {

@@ -8,9 +8,12 @@ var Game = function() {
     }
     this.myLoader.loadFiles();
     var that = this;
-    this.myLoader.on('finish', function(){ console.log(that.myLoader.getFile()); console.log('All assets loaded.'); });
+    this.myLoader.on('finish', function(){ 
+        console.log('All assets loaded.');
+        that.scriptState = "titleScreen";
+    });
 
-    this.scriptState = "titleScreen";
+    this.scriptState = "loading";
     this.oldScriptState = "";
     this.frame = 0;
 
