@@ -1,6 +1,22 @@
 var Game = function() {
     this.coq = new Coquette(this, "canvas", 800, 600, "#111");
 
+    /*
+    this.assets = new AssetManager();
+    this.assets.downloadAll(function() {console.log("success!!!"); }, function(p1,p2){console.log(p1, p2);})
+    this.assets.loadVideo(0);
+    this.assets.playVideo();
+    */
+
+    this.myLoader = html5Preloader();
+    var assets = getAssets();
+    for (var i = 0; i < assets.length; i++){
+        this.myLoader.addFiles(assets[i]);
+    }
+    this.myLoader.loadFiles();
+    var that = this;
+    this.myLoader.on('finish', function(){ console.log(that.myLoader.getFile()); console.log('All assets loaded.'); });
+
     this.scriptState = "titleScreen";
     this.oldScriptState = "";
     this.frame = 0;
