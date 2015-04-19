@@ -7,6 +7,7 @@
 
         this.movement = options.movement || 0;
 
+        this.minFocalLength = options.minFocalLength || 4;
         this.focalLength = 16;
         this.focalLights = [];
         this.mirrormode = false;
@@ -82,10 +83,13 @@
                 this.center.y = 0;
             }
 
-
+            if (this.focalLength < this.minFocalLength && this.focalLength > 0) {
+                this.focalLength = -this.minFocalLength;
+            } else if (this.focalLength > -this.minFocalLength && this.focalLength < 0) {
+                this.focalLength = this.minFocalLength;
+            }
 
             this.mirrormode = this.focalLength <= 0;
-
 
             //grab new lights
             var self = this;

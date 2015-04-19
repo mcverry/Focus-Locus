@@ -83,7 +83,7 @@ window.Script = {
             });
 
             this.coq.entities.create(Lens, {
-                center: {x: 200, y : 200},
+                center: {x: 200, y : 300},
                 movement : {
                     up : {
                         key: this.coq.inputter.UP_ARROW,

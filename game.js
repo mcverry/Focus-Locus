@@ -39,5 +39,5 @@ var Game = function() {
 };
 
 window.addEventListener('load', function() {
-    new Game();
+    game = new Game();
 });
