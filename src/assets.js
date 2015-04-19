@@ -6,7 +6,8 @@ function getAssets(){
             'res/img/spritesheet_earth.png',
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
-            'res/img/hubble.png'
- 
+            'res/img/hubble.png',
+            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4', 
+            'test*:/res/vid/empire.mp4'
     ]   
 }

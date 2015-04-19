@@ -55,13 +55,34 @@ window.Script = {
                 lens.focalLength = 10 + (Math.sin(frame / 100) * 1.5);
             });
             if (this.flagthing && !(this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
-                this.scriptState = "intro";
+                this.scriptState = "welcome";
             } else if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
                 this.flagthing = true;
             }
         },
         draw : function(ctx) {
 
+        }
+    },
+    welcome : {
+        setup : function(){
+            this.video = this.myLoader.getFile("welcome");
+            console.log(this.video);
+            this.video.play();
+        },
+
+        draw : function(ctx) {
+            
+            //this.video
+            if (this.video) {
+                ctx.drawImage(this.video, 200, 150);
+            }
+        },
+
+        update : function() {
+            if (this.video.ended) {
+                this.scriptState = "intro";
+            }
         }
     },
     intro : {
