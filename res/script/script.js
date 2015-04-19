@@ -67,15 +67,35 @@ window.Script = {
     welcome : {
         setup : function(){
             this.video = this.myLoader.getFile("welcome");
-            console.log(this.video);
+            this.audio = {};
+            this.audio["static"] = this.myLoader.getFile("static");
+
             this.video.play();
+           
+            var ctx = this.coq.renderer._ctx;
+            this.viddraw = {
+                    w : this.video.videoWidth,
+                    h : this.video.videoHeight,
+                    x : (ctx.canvas.width - this.video.videoWidth) / 2,
+                    y : (ctx.canvas.height - this.video.videoHeight) / 2
+            }
         },
 
-        draw : function(ctx) {
-            
-            //this.video
-            if (this.video) {
-                ctx.drawImage(this.video, 200, 150);
+        draw : function(ctx) { 
+            if (this.video) { 
+                if (this.video.currentTime > 1) {
+                //if (this.video.currentTime > this.video.duration - 1){
+                    this.viddraw.y += 4;
+                    this.viddraw.h -= 8;
+                    if (this.audio.static.paused) {
+                        this.audio.static.play()
+                    }
+                }
+                if (this.viddraw.h <= 0) {
+                    this.viddraw.h = 0;
+                }
+                
+                ctx.drawImage(this.video, this.viddraw.x,  this.viddraw.y, this.viddraw.w, this.viddraw.h);
             }
         },
 

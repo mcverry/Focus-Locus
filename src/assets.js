@@ -8,6 +8,7 @@ function getAssets(){
             'res/img/flashlight.png',
             'res/img/hubble.png',
             'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4', 
+            'static*:res/audio/static.mp3',
             'test*:/res/vid/empire.mp4'
     ]   
 }
