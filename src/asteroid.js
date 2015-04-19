@@ -2,7 +2,7 @@
 
     exports.Asteroid = function(game, options){
         this.game = game;
-        this.size = options.size || {x : 10, y : 10};
+        this.size = options.size || {x : 16, y : 16};
 
         this.center = options.center || {
             x: this.size.x >> 1,
@@ -12,9 +12,15 @@
         this.maxStrength = options.strength || 1000;
         this.strength = this.maxStrength;
         this.damageThreshold = options.damageThreshold || 5;
-        this.healingFactor = options.healingFactor || 1;
+        this.healingFactor = options.healingFactor || 5;
 
         this.sprite = options.sprite;
+        this.currentSprite = 0;
+        this.spriteOffset = {
+            x : 16,
+            y : 16
+        };
+        this.numSprites = options.numSprites || this.sprite.height / ((this.size.y) + this.spriteOffset.y);
     };
 
     exports.Asteroid.prototype = {
@@ -29,25 +35,35 @@
                 this.strength += this.healingFactor;
             }
             this.newDamage = 0;
+
+            this.currentSprite += 0.6;
+            if (this.currentSprite > this.numSprites) {
+                this.currentSprite = 0;
+            }
         },
 
         draw : function (ctx) {
-            ctx.beginPath();
-            ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
-            ctx.strokeStyle = '#FFF';
-            ctx.stroke();
+            if (this.game.debugMode) {
+                ctx.beginPath();
+                ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+                ctx.strokeStyle = '#FFF';
+                ctx.stroke();
+            }
+
+            var damagePercent = (10 - ((this.strength / this.maxStrength) * 10)) | 0;
+            if (damagePercent >= 10) damagePercent = 9;
 
             if (this.sprite) {
                 ctx.drawImage(
-                    this.sprite,
-                    0,
-                    0,
-                    this.sprite.width,
-                    this.sprite.height,
-                    this.center.x - (this.sprite.width >> 1),
-                    this.center.y - (this.sprite.height >> 1),
-                    this.sprite.width,
-                    this.sprite.height
+                    this.sprite, //img
+                    damagePercent * (this.size.x + this.spriteOffset.x), //sx
+                    (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y), //sy
+                    this.size.x << 1, //swidth
+                    this.size.y << 1, //sheight
+                    this.center.x - (this.size.x), //x
+                    this.center.y - (this.size.y), //y
+                    this.size.x << 1, //width
+                    this.size.y << 1//height
                 );
             }
         },

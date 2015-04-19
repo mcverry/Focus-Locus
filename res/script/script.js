@@ -45,7 +45,6 @@ window.Script = {
             });
         },
         teardown : function() {
-            this.focusSplash = null;
             this.coq.entities.all().forEach(function(entity) {
                 this.coq.entities.destroy(entity);
             }.bind(this));
@@ -72,7 +71,7 @@ window.Script = {
         },
 
         draw : function(ctx) {
-            
+
             //this.video
             if (this.video) {
                 ctx.drawImage(this.video, 200, 150);
