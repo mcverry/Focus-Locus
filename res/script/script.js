@@ -2,11 +2,11 @@
 window.ScriptUtil = {
 
     newVideoTransition : function(videoid, nextState) {
-
-    return  {
-            setup : window.ScriptUtil.videoTransitionSetup(videoid),
-            draw : window.ScriptUtil.videoTransitionDraw(),
-            update : window.ScriptUtil.videoTransitionUpdate(nextState)
+        return  {
+            setup : ScriptUtil.videoTransitionSetup(videoid),
+            draw : ScriptUtil.videoTransitionDraw(),
+            update : ScriptUtil.videoTransitionUpdate(nextState),
+            teardown : ScriptUtil.videoTransitionTeardown()
         };
     },
 
@@ -17,11 +17,6 @@ window.ScriptUtil = {
                     this.viddraw.y += 4;
                     this.viddraw.h -= 8;
                     this.audio.play('static');
-                    /*
-                    if (this.audio.static.paused && !this.audioplayed.static) {
-                        this.audioplayed.static = true;
-                        this.audio.static.play()
-                    }*/
                 }
                 if (this.viddraw.h <= 0) {
                     this.viddraw.h = 0;
@@ -62,8 +57,14 @@ window.ScriptUtil = {
                 this.scriptState = nextState;
             }
         };
-    }
+    },
 
+    videoTransitionTeardown : function(){
+        return function(){
+            this.audio.clear();
+            this.video.pause();
+        }
+    }
 };
 
 window.Script = {
