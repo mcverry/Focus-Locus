@@ -116,10 +116,9 @@
             };
         },
         getLightSegments : function(source) {
-            if (this.center.x == source.center.x) {
-                this.center.x += 0.00001;
-            }
-            var slope = (this.center.y - source.center.y) / (this.center.x - source.center.x);
+            var offset = this.center.x == source.center.x ? 0.00001 : 0;
+
+            var slope = (this.center.y - source.center.y) / (this.center.x + offset - source.center.x);
             var perp = Math.atan(-1 / slope);
             var result = {
                     x1 : this.center.x + (this.size.x * Math.cos(perp)),
@@ -128,16 +127,6 @@
                     y2 : this.center.y - (this.size.y * Math.sin(perp)),
                     src : this
                 };
-            this.lt = [
-                {
-                    x : result.x1,
-                    y : result.y1
-                },
-                {
-                    x : result.x2,
-                    y : result.y2
-                }
-            ];
             return [result, {
                 x1 : result.x2,
                 y1 : result.y2,
