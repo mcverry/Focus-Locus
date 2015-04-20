@@ -11,6 +11,8 @@ var Game = function() {
         this.scriptState = "titleScreen";
     }.bind(this));
 
+    this.audio = new AudioManager(this); 
+
     this.scriptState = "loading";
     this.oldScriptState = "";
     this.frame = 0;
