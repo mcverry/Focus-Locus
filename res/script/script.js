@@ -143,6 +143,7 @@ window.Script = {
     intro : {
         setup : function() {
 
+            //this.audio.background('epic');
             this.audio.add('static');
 
             this.coq.entities.create(Light, {
