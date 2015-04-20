@@ -9,16 +9,16 @@
 		};
 
 		this.size = options.size || {
-			x : 5 + (Math.random() * 10),
-			y : 5 + (Math.random() * 10)
+			x : 3 + (Math.random() * 6),
+			y : 3 + (Math.random() * 6)
 		};
 
 		this.velocity = options.velocity || {
-			x : 10 - (Math.random() * 10),
-			y : 1 - (Math.random() * 2)
+			x : 0.5 - (Math.random() * 1),
+			y : -3 + (Math.random() * 2)
 		};
 
-		this.strength = options.strength || (Math.random() * 60) | 0;
+		this.strength = options.strength || (Math.random() * 30) | 0;
 	};
 
 	exports.Smoke.prototype = {

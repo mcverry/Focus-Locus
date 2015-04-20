@@ -147,7 +147,7 @@ window.Script = {
             this.audio.add('static');
 
             this.coq.entities.create(Light, {
-                center : {x : 150, y : 300},
+                center : {x : 100, y : 300},
                 color : "rgba(255, 255, 220, 0.2)",
                 numRays : 30,
                 startAngle : -Math.PI / 8,
@@ -196,6 +196,11 @@ window.Script = {
                         speed : 0.7
                     }
                 }
+            });
+
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/hangar.png'),
+                zindex : -1
             });
         },
         teardown : function() {
