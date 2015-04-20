@@ -5,7 +5,7 @@
         this.game = game;
 
         this.center = options.center;
-        this.color = options.color || "white";
+        this.color = options.color || "red";
         this.strength = options.strength || 6;
         this.intersects = [];
 
@@ -119,13 +119,13 @@
                     ctx.stroke();
                 }
             } else {
-                ctx.beginPath();
                 ctx.strokeStyle = this.color;
                 for (i = 0; i < this.intersects.length; i++) {
+                    ctx.beginPath();
                     ctx.moveTo(this.center.x, this.center.y);
                     ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
+                    ctx.stroke();
                 }
-                ctx.stroke();
             }
 
             //clear out dynamic lighting

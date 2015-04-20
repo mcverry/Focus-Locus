@@ -1,18 +1,18 @@
 
 window.ScriptUtil = {
 
-    newVideoTransition : function(videoid, nextstate) {
+    newVideoTransition : function(videoid, nextState) {
 
     return  {
             setup : window.ScriptUtil.videoTransitionSetup(videoid),
             draw : window.ScriptUtil.videoTransitionDraw(),
-            update : window.ScriptUtil.videoTransitionUpdate(nextstate)
-        }; 
+            update : window.ScriptUtil.videoTransitionUpdate(nextState)
+        };
     },
 
     videoTransitionDraw : function() {
         return function(ctx) {
-            if (this.video) { 
+            if (this.video) {
                 if (this.video.currentTime > this.video.duration - 1){
                     this.viddraw.y += 4;
                     this.viddraw.h -= 8;
@@ -24,10 +24,10 @@ window.ScriptUtil = {
                 if (this.viddraw.h <= 0) {
                     this.viddraw.h = 0;
                 }
-                
+
                 ctx.drawImage(this.video, this.viddraw.x,  this.viddraw.y, this.viddraw.w, this.viddraw.h);
             }
-        }
+        };
     },
 
     videoTransitionSetup : function(videoid) {
@@ -39,23 +39,30 @@ window.ScriptUtil = {
             this.audioplayed = {};
             this.audioplayed["static"] = false;
             this.video.play();
-           
+
             var ctx = this.coq.renderer._ctx;
             this.viddraw = {
                     w : this.video.videoWidth,
                     h : this.video.videoHeight,
                     x : (ctx.canvas.width - this.video.videoWidth) / 2,
                     y : (ctx.canvas.height - this.video.videoHeight) / 2
-            }
-        }
+            };
+        };
     },
- 
-    videoTransitionUpdate : function(nextstate) {
+
+    videoTransitionUpdate : function(nextState) {
         return function() {
-            if (this.video.ended) {
-               this.scriptState = nextstate;
+            if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
+                this.skipVideoFlag = true;
             }
-        }
+            if (this.video.ended) {
+                this.skipVideoFlag = false;
+                this.scriptState = nextState;
+            } else if ((this.skipVideoFlag && !this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
+                //todo tear down video
+                this.scriptState = nextState;
+            }
+        };
     }
 
 };
@@ -67,6 +74,11 @@ window.Script = {
                 source : document.getElementById("focussplash"),
                 zindex : 2
             });
+        },
+        teardown : function () {
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
         }
     },
     titleScreen : {
@@ -125,9 +137,9 @@ window.Script = {
 
         }
     },
-    
+
     welcome : ScriptUtil.newVideoTransition('welcome', 'intro'),
-    
+
     intro : {
         setup : function() {
             this.coq.entities.create(Light, {
