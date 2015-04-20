@@ -1,7 +1,7 @@
 var Game = function() {
     this.coq = new Coquette(this, "canvas", 800, 600, "#111");
 
-    
+
     //this.prefixRes = 'http://strikesagainst.com/focus-locus/res/';
     this.prefixRes = 'http://localhost:8000/res/';
     this.assetsLoaded = false;
