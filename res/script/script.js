@@ -16,7 +16,10 @@ window.ScriptUtil = {
                 if (this.video.currentTime > this.video.duration - 1){
                     this.viddraw.y += 4;
                     this.viddraw.h -= 8;
-                    this.audio.play('static');
+                    if (!this.viddraw.staticplay){
+                        this.viddraw.staticplay = true;
+                        this.audio.play('static', {channel : 'bg'});
+                    }
                 }
                 if (this.viddraw.h <= 0) {
                     this.viddraw.h = 0;
@@ -31,11 +34,11 @@ window.ScriptUtil = {
         return function() {
             this.video = this.myLoader.getFile(videoid);
             this.audio.clear();
-            this.audio.add("static", {numtracks : 1, playmax : 1});
             this.video.play();
 
             var ctx = this.coq.renderer._ctx;
             this.viddraw = {
+                    staticplay : false,
                     w : this.video.videoWidth,
                     h : this.video.videoHeight,
                     x : (ctx.canvas.width - this.video.videoWidth) / 2,
@@ -138,13 +141,12 @@ window.Script = {
         }
     },
 
-    level1Intro : ScriptUtil.newVideoTransition('welcome', 'level1'),
+    level1Intro : ScriptUtil.newVideoTransition('test', 'level1'),
 
     level1 : {
         setup : function() {
 
-            this.audio.background('balloons');
-            this.audio.add('static');
+            this.audio.play('balloons', {channel : 'bg', loop : true }); 
 
             this.coq.entities.create(Light, {
                 center : {x : 100, y : 300},
@@ -225,8 +227,7 @@ window.Script = {
     level2 : {
         setup : function() {
 
-            this.audio.background('balloons');
-            this.audio.add('static');
+            this.audio.play('balloons', {channel : "bg", loop : true});
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 400, y : 300},
@@ -280,8 +281,7 @@ window.Script = {
 
     level3 : {
         setup : function() {
-            this.audio.background('balloons');
-            this.audio.add('static');
+            this.audio.play('balloons', {channel: 'bg', loop:true});
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 400, y : 300},
@@ -356,7 +356,6 @@ window.Script = {
 
     level7 : {
         setup : function () {
-            this.audio.add('static');
 
             for (var i = 0; i < 75; i++) {
                 this.coq.entities.create(Light, {

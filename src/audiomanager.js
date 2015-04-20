@@ -1,6 +1,8 @@
 ;(function(exports) {
     exports.AudioManager = function(game, audio, cbFinish){
         this.audio = {};
+        this.playing = {};
+
         this.cbFinish = cbFinish || function() {};
         this.bg = null;
         this.game = game;
@@ -23,22 +25,31 @@
     }
 
     exports.AudioManager.prototype.loads = function(aud) {
-        this.audio[aud[0]] = {
-            sound : new Howl({
+        this.audio[aud[0]] = new Howl({
                 urls: [this.game.prefixRes + aud[1]],
                 onload : this._cbSoundLoaded()
-            }),
-            playing : {}
-        };
+            });
     }
 
-    exports.AudioManager.prototype.play = function(aid, myid, options){
+    exports.AudioManager.prototype._cbPlay = function(sound, track){
+        var that = this;
+        return function(id){
+            var c = that.playing[track]
+            if (c) {
+                c.sound.stop(c.id);
+            }
+            that.playing[track] = {sound : sound, id : id};
+        }
+    }
+
+    exports.AudioManager.prototype.play = function(aid, options){
         if (options === undefined){
             options = {};
         };
+
         var volume = options.volume || 1.0;
         var loop = options.loop || false;
-        var track = myid || "global";
+        var track = options.channel || "global";
 
         var s = this.audio[aid]
         if (!s){
@@ -46,15 +57,19 @@
             return false;
         }
 
-        if (s.playing[track] !== undefined){
-            console.log("sound already playing on track", aid, track);
-            return false;
-        }
+        console.log("playing ", aid, " on channel ", track, ":", loop, volume);
+        s.play(this._cbPlay(s, track));
+        s.volume(volume); 
+        s.loop(loop);  
+    };
 
-        s.playing[track] = -1;
-        s.sound.play(this._cbPlay(s, track));
-        s.sound.volume(volume); 
-        s.sound.loop(loop);  
+
+    exports.AudioManager.prototype.clear = function() {
+        for (var a in this.audio){
+            for (var t in a.playing){
+                a.sound.stop(t);
+            }
+        }
     };
 
 })(window);
