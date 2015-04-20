@@ -9,6 +9,8 @@
             y: this.size.y >> 1
         };
 
+        this.id = "a" + this.game.scriptState + "_" +this.game.coq.entities.all().length; 
+
         this.maxStrength = options.strength || 1000;
         this.strength = this.maxStrength;
         this.damageThreshold = options.damageThreshold || 5;
@@ -33,7 +35,7 @@
             if (this.strength <= 0) {
                 console.log(this);
                 console.log(this.popSound);
-                console.log(this.game.audio.play(this.popSound));
+                console.log(this.game.audio.play(this.popSound, {channel : this.id}));
                 this.game.coq.entities.destroy(this);
             }
             if (this.newDamage > this.damageThreshold) {
