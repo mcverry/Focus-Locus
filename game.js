@@ -13,6 +13,8 @@ var Game = function() {
         that.scriptState = "titleScreen";
     });
 
+    this.audio = new AudioManager(this); 
+
     this.scriptState = "loading";
     this.oldScriptState = "";
     this.frame = 0;
