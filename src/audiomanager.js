@@ -22,7 +22,7 @@
         };
 
         var a = this.game.myLoader.getFile(aid);
-        if (a === undefined) {
+        if (a === undefined || a === null) {
             return undefined;
         }
 
@@ -41,19 +41,18 @@
             return undefined;
         }
 
-        if (a.playmax <= 0 && a.playcount >= a.playmox) {
+        if (a.playmax > 0 && a.playcount >= a.playmax) {
             return false;
         }
-
+        
         for (var i = 0; i < a.tracks.length; i++){
             if (a.tracks[i].paused) {
                 a.tracks[i].play();
-                break;
+                a.playcount++;
+                return true;
             }
         }
-
-        a.playcount++;
-        return true;
+        return false;
     }
 
 })(window);

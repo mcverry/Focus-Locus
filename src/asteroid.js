@@ -21,11 +21,17 @@
             y : 16
         };
         this.numSprites = options.numSprites || this.sprite.height / ((this.size.y) + this.spriteOffset.y);
+
+        this.popSound = options.popSound || null;
+        this.cookSound = options.cookSound || null;
     };
 
     exports.Asteroid.prototype = {
         update : function(){
             if (this.strength <= 0) {
+                console.log(this);
+                console.log(this.popSound);
+                console.log(this.game.audio.play(this.popSound));
                 this.game.coq.entities.destroy(this);
             }
             if (this.newDamage > this.damageThreshold) {
