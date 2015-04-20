@@ -24,7 +24,6 @@
     };
 
     exports.Asteroid.prototype = {
-
         update : function(){
             if (this.strength <= 0) {
                 this.game.coq.entities.destroy(this);
@@ -40,6 +39,24 @@
             if (this.currentSprite > this.numSprites) {
                 this.currentSprite = 0;
             }
+
+            for (var i = 0; i < this.getDamageLevel(); i ++) {
+                if (Math.random() < 0.5) {
+                    return;
+                }
+                this.game.coq.entities.create(Smoke, {
+                    center: {
+                        x : this.center.x,
+                        y : this.center.y
+                    }
+                });
+            }
+        },
+
+        getDamageLevel : function() {
+            var damagePercent = (10 - ((this.strength / this.maxStrength) * 10)) | 0;
+            if (damagePercent >= 10) damagePercent = 9;
+            return damagePercent;
         },
 
         draw : function (ctx) {
@@ -50,13 +67,10 @@
                 ctx.stroke();
             }
 
-            var damagePercent = (10 - ((this.strength / this.maxStrength) * 10)) | 0;
-            if (damagePercent >= 10) damagePercent = 9;
-
             if (this.sprite) {
                 ctx.drawImage(
                     this.sprite, //img
-                    damagePercent * (this.size.x + this.spriteOffset.x), //sx
+                    this.getDamageLevel() * (this.size.x + this.spriteOffset.x), //sx
                     (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y), //sy
                     this.size.x << 1, //swidth
                     this.size.y << 1, //sheight
