@@ -85,7 +85,7 @@ window.ScriptUtil = {
         });
     },
     loadScreenGreenLight : function(strength) { 
-        return this.light2 = this.coq.entities.create(Light, {
+        return this.coq.entities.create(Light, {
             center : {x : 150, y : 400},
             color : "rgba(0, 255, 0, 0.3)",
             numRays : 10,
@@ -94,6 +94,20 @@ window.ScriptUtil = {
             strength : strength,
             sprite : this.myLoader.getFile("res/img/hubble.png")
         });
+    },
+
+    loadScreenLenses : function() {
+        this.coq.entities.create(Lens, {center: {x: 200, y : 200}});
+        this.coq.entities.create(Lens, {center: {x: 300, y : 200}});
+        this.coq.entities.create(Lens, {center: {x: 400, y : 200}});
+        this.coq.entities.create(Lens, {center: {x: 500, y : 200}});
+        this.coq.entities.create(Lens, {center: {x: 580, y : 200}});
+
+        this.coq.entities.create(Lens, {center: {x: 200, y : 400}});
+        this.coq.entities.create(Lens, {center: {x: 300, y : 400}});
+        this.coq.entities.create(Lens, {center: {x: 400, y : 400}});
+        this.coq.entities.create(Lens, {center: {x: 500, y : 400}});
+        this.coq.entities.create(Lens, {center: {x: 580, y : 400}});
     }
 
 };
@@ -103,19 +117,7 @@ window.Script = {
         setup : function() {
             this.light1 = ScriptUtil.loadScreenRedLight.call(this,1);
             this.light2 = ScriptUtil.loadScreenGreenLight.call(this,1);
-            this.coq.entities.create(Lens, {center: {x: 200, y : 200}});
-            this.coq.entities.create(Lens, {center: {x: 300, y : 200}});
-            this.coq.entities.create(Lens, {center: {x: 400, y : 200}});
-            this.coq.entities.create(Lens, {center: {x: 500, y : 200}});
-            this.coq.entities.create(Lens, {center: {x: 580, y : 200}});
-
-            this.coq.entities.create(Lens, {center: {x: 200, y : 400}});
-            this.coq.entities.create(Lens, {center: {x: 300, y : 400}});
-            this.coq.entities.create(Lens, {center: {x: 400, y : 400}});
-            this.coq.entities.create(Lens, {center: {x: 500, y : 400}});
-            this.coq.entities.create(Lens, {center: {x: 580, y : 400}});
-
-            this.coq.entities.create(Splash, {
+               this.coq.entities.create(Splash, {
                 source : document.getElementById("focussplash"),
                 zindex : 2
             });
@@ -133,12 +135,19 @@ window.Script = {
             if (s2 != this.s2p)
             {
                 this.coq.entities.destroy(this.light2);
+                this.coq.entities.all(Lens).forEach(function(entity) {
+                    this.coq.entities.destroy(entity);
+                }.bind(this));
                 this.light2 = ScriptUtil.loadScreenGreenLight.call(this,s2);
+                ScriptUtil.loadScreenLenses.call(this);
             }
             if (s != this.sp){
                 this.coq.entities.destroy(this.light1);
-            console.log(s, this.sp);
+                this.coq.entities.all(Lens).forEach(function(entity) {
+                    this.coq.entities.destroy(entity);
+                }.bind(this));
                 this.light1 = ScriptUtil.loadScreenRedLight.call(this,s);
+                ScriptUtil.loadScreenLenses.call(this);
             }
             this.sp = s;
             this.s2p = s2;
