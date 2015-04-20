@@ -4,7 +4,7 @@
         this.game = game;
         this.size = options.size || {x : 800, y : 600};
         this.pos = options.pos || {x : 0, y : 0};
-        this.center = {
+        this.center = options.center || {
             x : this.pos.x + (this.size >> 1),
             y : this.pos.y + (this.size >> 1)
         };

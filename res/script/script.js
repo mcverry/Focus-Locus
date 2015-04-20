@@ -131,7 +131,8 @@ window.Script = {
                 lens.focalLength = 10 + (Math.sin(frame / 100) * 1.5);
             });
             if (this.flagthing && !(this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
-                this.scriptState = "level1Intro";
+                //this.scriptState = "level1Intro";
+                this.scriptState = "level5"
             } else if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
                 this.flagthing = true;
             }
@@ -145,8 +146,8 @@ window.Script = {
 
     level1 : {
         setup : function() {
+            this.audio.play('full', {channel : 'bg', loop : true });
 
-            this.audio.play('full', {channel : 'bg', loop : true }); 
             this.coq.entities.create(Light, {
                 center : {x : 100, y : 300},
                 color : "rgba(255, 255, 220, 0.2)",
@@ -183,11 +184,11 @@ window.Script = {
                 movement : {
                     up : {
                         key: this.coq.inputter.UP_ARROW,
-                        speed : 0.3
+                        speed : 0.1
                     },
                     down : {
                         key : this.coq.inputter.DOWN_ARROW,
-                        speed : 0.3
+                        speed : 0.1
                     },
                     left : {
                         key : this.coq.inputter.LEFT_ARROW,
@@ -377,21 +378,30 @@ window.Script = {
             });
 
             this.coq.entities.create(Splash, {
-                source : this.myLoader.getFile('res/img/big_flashlight.png'),
-                zindex : -1
+                source : this.myLoader.getFile('res/img/desert_front.png'),
+                zindex : 1
             });
 
-            for (var i = 0; i < 75; i++) {
-                this.coq.entities.create(Light, {
-                    center : {x : 0, y : i * 8},
-                    color : "rgba(255, 255, 220, 0.4)",
-                    numRays : 1,
-                    lineWidth : 8
-                });
-            }
+            this.coq.entities.create(Light, {
+                center : {x : 50, y : 300},
+                color : "rgba(255, 255, 220, 0.3)",
+                numRays : 32,
+                startAngle : Math.PI * 1.6,
+                endAngle : Math.PI * 2,
+                sprite : this.myLoader.getFile("res/img/big_flashlight.png"),
+                spriteOffset : {x: 50, y : 80}
+            });
+
+            var hab1 = this.coq.entities.create(Asteroid, {
+                size : {x : 32, y : 78 / 2},
+                sprite : this.myLoader.getFile("res/img/hot_air_balloon_1.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
 
             this.coq.entities.create(Lens, {
-                center: {x: 50, y : 200},
+                center: {x: 250, y : 200},
                 limits : { top: 50, bottom: 300 },
                 movement : {
                     up : {
@@ -411,17 +421,147 @@ window.Script = {
                         speed : 0.7
                     }
                 },
-                sprite: this.myLoader.getFile('res/img/hot_air_balloon_1.png'),
-                spriteOffset : {
-                    x : 0,
-                    y : 0
-                }
+                attachment : hab1,
+                attachmentOffset : {x: 0, y : -64},
+                sprite: this.myLoader.getFile('res/img/lens.png'),
+                spriteOffset : {x : 0, y : 0}
             });
+
+            for (var i = 0; i < 20; i ++) {
+                this.coq.entities.create(Asteroid, {
+                    center : {x: 800 + i * (100 + Math.random() * 100), y: 50 + Math.random()  * 225},
+                    sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                    popSound : 'static',
+                    cookSound : 'static',
+                    damageThreshold : 3,
+                    strength : 500
+                });
+            }
+        },
+        update : function(frame) {
+            var notFriends = this.coq.entities.all(Asteroid).filter(function(balloon) {
+                return !balloon.friend;
+            });
+            notFriends.forEach(function(balloon){
+                balloon.center.x -= 1;
+                if (balloon.center.x <= 0) {
+                    this.coq.entities.destroy(balloon);
+                }
+            }.bind(this));
+            if (notFriends.length === 0) {
+                this.scriptState = "level5";
+            }
+        },
+        teardown : function () {
+            this.coq.entities.all(Lens).forEach(function(entity) {
+                this.saveLensPositionForLevel5 = {
+                    x : entity.center.x,
+                    y : entity.center.y
+                };
+                this.coq.entities.destroy(entity);
+            }.bind(this));
+
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
         }
     },
 
     level5 : {
+        setup : function () {
 
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/desert.png'),
+                zindex : -2
+            });
+
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/desert_front.png'),
+                zindex : 1
+            });
+
+            this.coq.entities.create(Light, {
+                center : {x : 50, y : 300},
+                color : "rgba(255, 255, 220, 0.3)",
+                numRays : 32,
+                startAngle : Math.PI * 1.7,
+                endAngle : Math.PI * 2,
+                sprite : this.myLoader.getFile("res/img/big_flashlight.png"),
+                spriteOffset : {x: 50, y : 80}
+            });
+
+            var hab1 = this.coq.entities.create(Asteroid, {
+                size : {x : 32, y : 78 / 2},
+                sprite : this.myLoader.getFile("res/img/hot_air_balloon_1.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Lens, {
+                center: this.saveLensPositionForLevel5 || {x: 250, y : 200},
+                limits : { top: 50, bottom: 300 },
+                movement : {
+                    up : {
+                        key: this.coq.inputter.W,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.S,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.A,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.D,
+                        speed : 0.7
+                    }
+                },
+                attachment : hab1,
+                attachmentOffset : {x: 0, y : -64},
+                sprite: this.myLoader.getFile('res/img/lens.png'),
+                spriteOffset : {x : 0, y : 0}
+            });
+
+            var hab2 = this.coq.entities.create(Asteroid, {
+                size : {x : 32, y : 96 / 2},
+                sprite : this.myLoader.getFile("res/img/hot_air_balloon_2.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Lens, {
+                center: {x: 300, y : 200},
+                limits : { top: 50, bottom: 300 },
+                movement : {
+                    up : {
+                        key: this.coq.inputter.I,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.K,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.J,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.L,
+                        speed : 0.7
+                    }
+                },
+                attachment : hab2,
+                attachmentOffset : {x: 0, y : -64},
+                sprite: this.myLoader.getFile('res/img/lens.png'),
+                spriteOffset : {x : 0, y : 0}
+            });
+
+            delete this.saveLensPositionForLevel5;
+        }
     },
 
     level6 : {

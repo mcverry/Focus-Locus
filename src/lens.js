@@ -20,6 +20,9 @@
         this.rays = [];
         this.bounce = 1;
 
+        this.attachment = options.attachment || null;
+        this.attachmentOffset = options.attachmentOffset || {x : 0, y : -100};
+
         this.limits = options.limits || {
             top : 200,
             bottom : 400
@@ -63,7 +66,8 @@
                 x2 : point.x + dx,
                 y2 : point.y + dy,
                 strength : incoming.strength - 1,
-                color : incoming.color
+                color : incoming.color,
+                refracted : true
             };
 
             if (ray.strength > 0) {
@@ -100,6 +104,17 @@
                 this.center.y = this.limits.bottom;
             } else if (this.center.y < this.limits.top) {
                 this.center.y = this.limits.top;
+            }
+
+            if (this.attachment) {
+                this.attachment.center = {
+                    x : this.center.x + this.attachmentOffset.x,
+                    y : this.center.y + this.attachmentOffset.y
+                };
+                if (this.attachment.strength <= 0) {
+                    //todo
+                    this.game.coq.entities.destroy(this);
+                }
             }
 
             if (this.focalLength < this.minFocalLength && this.focalLength > 0) {

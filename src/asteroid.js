@@ -9,12 +9,12 @@
             y: this.size.y >> 1
         };
 
-        this.id = "a" + this.game.scriptState + "_" +this.game.coq.entities.all().length; 
+        this.id = "a" + this.game.scriptState + "_" +this.game.coq.entities.all().length;
 
         this.maxStrength = options.strength || 1000;
         this.strength = this.maxStrength;
         this.damageThreshold = options.damageThreshold || 5;
-        this.healingFactor = options.healingFactor || 5;
+        this.healingFactor = options.healingFactor || 2;
 
         this.sprite = options.sprite;
         this.currentSprite = 0;
@@ -72,7 +72,7 @@
             var sx, sy, shake;
             if (this.game.debugMode) {
                 ctx.beginPath();
-                ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+                ctx.arc(this.center.x, this.center.y, this.size.y, 0, Math.PI *2);
                 ctx.strokeStyle = '#FFF';
                 ctx.stroke();
             }
@@ -83,7 +83,11 @@
                 sx = 0;
             }
 
-            sy = (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y);
+            if (this.sprite.height > this.size.y * 2) {
+                sy = (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y);
+            } else {
+                sy = 0;
+            }
 
             shake = {
                 x : Math.random() * this.getDamageLevel(),

@@ -25,7 +25,7 @@ var Game = function() {
         this.audioLoaded = true;
         console.log("audio assests loaded");
         this.gotoTitleScreen();
-    }); 
+    });
 
     this.gotoTitleScreen = function() {
         if (this.assetsLoaded && this.audioLoaded) {
@@ -52,6 +52,7 @@ var Game = function() {
                 }
             }
             this.oldScriptState = this.scriptState;
+            this.frame = 0;
         }
         if (Script[this.scriptState]) {
             if (Script[this.scriptState].update) {

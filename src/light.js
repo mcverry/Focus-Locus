@@ -24,7 +24,10 @@
             this.rays = options.rays;
         }
 
+        this.zindex = options.zindex || 0;
+
         this.sprite = options.sprite;
+        this.spriteOffset = options.spriteOffset || {x : 0, y : 0};
     };
 
     exports.Light.prototype = {
@@ -48,7 +51,8 @@
                         x2 : this.center.x + dx,
                         y2 : this.center.y + dy,
                         strength : this.strength,
-                        color : this.color
+                        color : this.color,
+                        refracted : false
                 };
                 this.rays.push(ray);
             }
@@ -88,11 +92,16 @@
                     }
                 }
 
-                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Lens) {
+                if (closestIntersect.segment.src &&
+                    closestIntersect.segment.src instanceof Lens
+                ) {
                     closestIntersect.segment.src.refract(this.rays[j], closestIntersect);
                 }
 
-                if (closestIntersect.segment.src && closestIntersect.segment.src instanceof Asteroid) {
+                if (closestIntersect.segment.src &&
+                    closestIntersect.segment.src instanceof Asteroid &&
+                    ray.refracted
+                ) {
                     closestIntersect.segment.src.damage(1);
                 }
 
@@ -105,6 +114,20 @@
             if(this.intersects.length === 0) return;
             //draw polygon
             var i;
+
+            if (this.sprite) {
+                ctx.drawImage(
+                    this.sprite,
+                    0,
+                    0,
+                    this.sprite.width,
+                    this.sprite.height,
+                    this.center.x - (this.sprite.width) + this.spriteOffset.x,
+                    this.center.y - (this.sprite.height >> 1) + this.spriteOffset.y,
+                    this.sprite.width,
+                    this.sprite.height
+                );
+            }
 
             if (this.game.debugMode) {
                 ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
@@ -135,19 +158,6 @@
                 this.rays = [];
             }
 
-            if (this.sprite) {
-                ctx.drawImage(
-                    this.sprite,
-                    0,
-                    0,
-                    this.sprite.width,
-                    this.sprite.height,
-                    this.center.x - (this.sprite.width),
-                    this.center.y - (this.sprite.height >> 1),
-                    this.sprite.width,
-                    this.sprite.height
-                );
-            }
         }
     };
 
