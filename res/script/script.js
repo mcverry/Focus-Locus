@@ -280,8 +280,8 @@ window.Script = {
 
     level3 : {
         setup : function() {
-            //this.audio.background('balloons');
-            //this.audio.add('static');
+            this.audio.background('balloons');
+            this.audio.add('static');
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 800, y : 300},
@@ -371,7 +371,54 @@ window.Script = {
     level4Intro : ScriptUtil.newVideoTransition('flashlights-to-bombs', 'level4'),
 
     level4 : {
+        setup : function () {
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/desert.png'),
+                zindex : -2
+            });
 
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/big_flashlight.png'),
+                zindex : -1
+            });
+
+            for (var i = 0; i < 75; i++) {
+                this.coq.entities.create(Light, {
+                    center : {x : 0, y : i * 8},
+                    color : "rgba(255, 255, 220, 0.4)",
+                    numRays : 1,
+                    lineWidth : 8
+                });
+            }
+
+            this.coq.entities.create(Lens, {
+                center: {x: 50, y : 200},
+                limits : { top: 50, bottom: 300 },
+                movement : {
+                    up : {
+                        key: this.coq.inputter.UP_ARROW,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.DOWN_ARROW,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.LEFT_ARROW,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.RIGHT_ARROW,
+                        speed : 0.7
+                    }
+                },
+                sprite: this.myLoader.getFile('res/img/hot_air_balloon_1.png'),
+                spriteOffset : {
+                    x : 0,
+                    y : 0
+                }
+            });
+        }
     },
 
     level5 : {

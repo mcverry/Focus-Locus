@@ -20,11 +20,16 @@
         this.rays = [];
         this.bounce = 1;
 
-        this.sprite = options.sprite;
-        this.spriteOffset = options.spriteOffset || {
-            x : 0,
-            y : 0
+        this.limits = options.limits || {
+            top : 200,
+            bottom : 400
         };
+
+        this.velocity = {x : 0, y : 0};
+        this.friction = options.friction || {x : 0.9, y : 0.9};
+
+        this.sprite = options.sprite;
+        this.spriteOffset = options.spriteOffset || {x : 0, y : 0};
 
         this.zindex = options.zindex || 5;
     };
@@ -72,10 +77,10 @@
 
             if (this.movement) {
                 if (inp.isDown(this.movement.up.key)) {
-                    this.center.y -= this.movement.up.speed;
+                    this.velocity.y -= this.movement.up.speed;
                 }
                 if (inp.isDown(this.movement.down.key)) {
-                    this.center.y += this.movement.down.speed;
+                    this.velocity.y += this.movement.down.speed;
                 }
                 if (inp.isDown(this.movement.left.key)){
                     this.focalLength -= this.movement.left.speed;
@@ -83,12 +88,18 @@
                 if (inp.isDown(this.movement.right.key)){
                     this.focalLength += this.movement.right.speed;
                 }
-
             }
-            if (this.center.y > 400) {
-                this.center.y = 400;
-            } else if (this.center.y < 200) {
-                this.center.y = 200;
+
+            this.center.x += this.velocity.x;
+            this.center.y += this.velocity.y;
+
+            this.velocity.x = this.velocity.x * this.friction.x;
+            this.velocity.y = this.velocity.y * this.friction.y;
+
+            if (this.center.y > this.limits.bottom) {
+                this.center.y = this.limits.bottom;
+            } else if (this.center.y < this.limits.top) {
+                this.center.y = this.limits.top;
             }
 
             if (this.focalLength < this.minFocalLength && this.focalLength > 0) {

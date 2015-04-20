@@ -8,8 +8,12 @@ function getAssets(){
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
             'res/img/hubble.png',
+            'res/img/desert.png',
             'res/img/hangar.png',
             'res/img/ceiling_lens.png',
+            'res/img/hot_air_balloon_1.png',
+            'res/img/hot_air_balloon_2.png',
+            'res/img/big_flashlight.png',
             'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4',
             'asteroids-to-stars*:http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.mp4',
             'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4',
@@ -21,7 +25,6 @@ function getAssets(){
 }
 
 function getAudio() {
-
     return [
         ['static', 'audio/static.mp3', 4],
         ['full', 'audio/I-Can-See-The-Frames-1.0.mp3', 1],
