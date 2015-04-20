@@ -1,7 +1,9 @@
 ;(function(exports) {
-    exports.AudioManager = function(game){
+    exports.AudioManager = function(game, timings){
         this.audio = {};
+        this.bg = null;
         this.game = game;
+        this.timings = timings
     }
 
     exports.AudioManager.prototype.clear = function(){
@@ -29,10 +31,27 @@
         for (var i = 0; i < numtracks; i++) {
             aud.tracks.push(a.cloneNode(true)); 
         }
-
-        console.log(aud); 
         this.audio[aid] = aud;
     }
+
+    exports.AudioManager.prototype.background = function(aid) {
+  
+        
+        if (this.bgloop) {
+            this.bgloop.stop();
+        }
+        
+        var a = this.game.myLoader.getFile(aid);
+        if (!a){
+            console.log('no such audio ' + aid);
+            return false;
+        }
+
+        this.bgloop = new SeamlessLoop();
+        this.bgloop.addDom(a, this.timings[aid], "bg");
+        this.bgloop.start("bg");
+    },
+
 
     exports.AudioManager.prototype.play = function(aid) {
         
