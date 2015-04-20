@@ -71,43 +71,38 @@ window.ScriptUtil = {
             this.video.pause();
             this.video.currentTime = 0;
         };
+    },
+
+    loadScreenRedLight : function(strength){ 
+        return this.coq.entities.create(Light, {
+            center : {x : 150, y : 200},
+            color : "rgba(255, 0, 0, 0.3)",
+            numRays : 10,
+            startAngle : -Math.PI / 8,
+            endAngle : Math.PI / 8,
+            strength : strength,
+            sprite : this.myLoader.getFile("res/img/hubble.png")
+        });
+    },
+    loadScreenGreenLight : function(strength) { 
+        return this.light2 = this.coq.entities.create(Light, {
+            center : {x : 150, y : 400},
+            color : "rgba(0, 255, 0, 0.3)",
+            numRays : 10,
+            startAngle : -Math.PI / 8,
+            endAngle : Math.PI / 8,
+            strength : strength,
+            sprite : this.myLoader.getFile("res/img/hubble.png")
+        });
     }
+
 };
 
 window.Script = {
     loading : {
         setup : function() {
-            this.coq.entities.create(Splash, {
-                source : document.getElementById("focussplash"),
-                zindex : 2
-            });
-        },
-        teardown : function () {
-            this.coq.entities.all().forEach(function(entity) {
-                this.coq.entities.destroy(entity);
-            }.bind(this));
-        }
-    },
-    titleScreen : {
-        setup : function() {
-            this.coq.entities.create(Light, {
-                center : {x : 150, y : 200},
-                color : "rgba(255, 0, 0, 0.3)",
-                numRays : 10,
-                startAngle : -Math.PI / 8,
-                endAngle : Math.PI / 8,
-                sprite : this.myLoader.getFile("res/img/hubble.png")
-            });
-
-            this.coq.entities.create(Light, {
-                center : {x : 150, y : 400},
-                color : "rgba(0, 255, 0, 0.3)",
-                numRays : 10,
-                startAngle : -Math.PI / 8,
-                endAngle : Math.PI / 8,
-                sprite : this.myLoader.getFile("res/img/hubble.png")
-            });
-
+            this.light1 = ScriptUtil.loadScreenRedLight.call(this,1);
+            this.light2 = ScriptUtil.loadScreenGreenLight.call(this,1);
             this.coq.entities.create(Lens, {center: {x: 200, y : 200}});
             this.coq.entities.create(Lens, {center: {x: 300, y : 200}});
             this.coq.entities.create(Lens, {center: {x: 400, y : 200}});
@@ -120,6 +115,42 @@ window.Script = {
             this.coq.entities.create(Lens, {center: {x: 500, y : 400}});
             this.coq.entities.create(Lens, {center: {x: 580, y : 400}});
 
+            this.coq.entities.create(Splash, {
+                source : document.getElementById("focussplash"),
+                zindex : 2
+            });
+        },
+
+        update : function(frame) {
+            console.log(frame);
+            game.loadedPercent = frame / 60;
+            var s = Math.ceil(game.loadedPercent * 12);
+            var s2 = 1
+            if (s > 6) {
+                s2 = s - 6; 
+                s = 6;
+            }
+            if (s2 != this.s2p)
+            {
+                this.coq.entities.destroy(this.light2);
+                this.light2 = ScriptUtil.loadScreenGreenLight.call(this,s2);
+            }
+            if (s != this.sp){
+                this.coq.entities.destroy(this.light1);
+            console.log(s, this.sp);
+                this.light1 = ScriptUtil.loadScreenRedLight.call(this,s);
+            }
+            this.sp = s;
+            this.s2p = s2;
+        },
+        teardown : function () {
+            this.coq.entities.all(Splash).forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
+        }
+    },
+    titleScreen : {
+        setup : function() {
             this.coq.entities.create(Splash, {
                 source : this.myLoader.getFile('res/img/focus_splash.png'),
                 zindex : 2
