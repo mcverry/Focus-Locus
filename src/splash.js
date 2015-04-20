@@ -12,13 +12,7 @@
 
         this.zindex = options.zindex || 2;
 
-        var loading = new Image();
-        loading.onload = function (){
-            this.image = loading;
-        }.apply(this);
-        if (options.source){
-            loading.src = options.source;
-        }
+        this.image = options.source;
     };
 
     exports.Splash.prototype = {

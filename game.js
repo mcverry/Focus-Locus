@@ -7,14 +7,17 @@ var Game = function() {
         this.myLoader.addFiles(assets[i]);
     }
     this.myLoader.loadFiles();
-    var that = this;
-    this.myLoader.on('finish', function(){ console.log(that.myLoader.getFile()); console.log('All assets loaded.'); });
+    this.myLoader.on('finish', function(){
+        this.scriptState = "titleScreen";
+    }.bind(this));
 
-    this.scriptState = "titleScreen";
+    this.audio = new AudioManager(this, getTimings()); 
+
+    this.scriptState = "loading";
     this.oldScriptState = "";
     this.frame = 0;
 
-    this.debugMode = false;
+    this.debugMode = true;
 
     this.update = function() {
         if (this.scriptState != this.oldScriptState) {

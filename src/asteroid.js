@@ -2,7 +2,7 @@
 
     exports.Asteroid = function(game, options){
         this.game = game;
-        this.size = options.size || {x : 10, y : 10};
+        this.size = options.size || {x : 16, y : 16};
 
         this.center = options.center || {
             x: this.size.x >> 1,
@@ -12,21 +12,26 @@
         this.maxStrength = options.strength || 1000;
         this.strength = this.maxStrength;
         this.damageThreshold = options.damageThreshold || 5;
-        this.healingFactor = options.healingFactor || 1;
+        this.healingFactor = options.healingFactor || 5;
 
-        if (options.sprite){
-            var loading = new Image();
-            loading.onload = function() {
-                this.sprite = loading;
-            }.apply(this);
-            loading.src = options.sprite;
-        }
+        this.sprite = options.sprite;
+        this.currentSprite = 0;
+        this.spriteOffset = {
+            x : 16,
+            y : 16
+        };
+        this.numSprites = options.numSprites || this.sprite.height / ((this.size.y) + this.spriteOffset.y);
+
+        this.popSound = options.popSound || null;
+        this.cookSound = options.cookSound || null;
     };
 
     exports.Asteroid.prototype = {
-
         update : function(){
             if (this.strength <= 0) {
+                console.log(this);
+                console.log(this.popSound);
+                console.log(this.game.audio.play(this.popSound));
                 this.game.coq.entities.destroy(this);
             }
             if (this.newDamage > this.damageThreshold) {
@@ -35,25 +40,50 @@
                 this.strength += this.healingFactor;
             }
             this.newDamage = 0;
+
+            this.currentSprite += 0.6;
+            if (this.currentSprite > this.numSprites) {
+                this.currentSprite = 0;
+            }
+
+            for (var i = 0; i < this.getDamageLevel(); i ++) {
+                if (Math.random() < 0.5) {
+                    return;
+                }
+                this.game.coq.entities.create(Smoke, {
+                    center: {
+                        x : this.center.x,
+                        y : this.center.y
+                    }
+                });
+            }
+        },
+
+        getDamageLevel : function() {
+            var damagePercent = (10 - ((this.strength / this.maxStrength) * 10)) | 0;
+            if (damagePercent >= 10) damagePercent = 9;
+            return damagePercent;
         },
 
         draw : function (ctx) {
-            ctx.beginPath();
-            ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
-            ctx.strokeStyle = '#FFF';
-            ctx.stroke();
+            if (this.game.debugMode) {
+                ctx.beginPath();
+                ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
+                ctx.strokeStyle = '#FFF';
+                ctx.stroke();
+            }
 
             if (this.sprite) {
                 ctx.drawImage(
-                    this.sprite,
-                    0,
-                    0,
-                    this.sprite.width,
-                    this.sprite.height,
-                    this.center.x - (this.sprite.width >> 1),
-                    this.center.y - (this.sprite.height >> 1),
-                    this.sprite.width,
-                    this.sprite.height
+                    this.sprite, //img
+                    this.getDamageLevel() * (this.size.x + this.spriteOffset.x), //sx
+                    (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y), //sy
+                    this.size.x << 1, //swidth
+                    this.size.y << 1, //sheight
+                    this.center.x - (this.size.x), //x
+                    this.center.y - (this.size.y), //y
+                    this.size.x << 1, //width
+                    this.size.y << 1//height
                 );
             }
         },
