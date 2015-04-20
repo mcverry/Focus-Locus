@@ -27,6 +27,13 @@
         this.popSound = options.popSound || null;
         this.cookSound = options.cookSound || null;
 
+        this.sizeAdjust = options.sizeAdjust || 1;
+
+        this.zindex = 3;
+
+        this.sun = options.sun || null;
+        this.speed = options.speed || 0.01;
+
         this.friend = options.friend || false;
     };
 
@@ -47,6 +54,14 @@
             this.currentSprite += 0.6;
             if (this.currentSprite > this.numSprites) {
                 this.currentSprite = 0;
+            }
+
+            if (this.sun) {
+                var angle = Math.atan2(this.center.y - this.sun.center.y, this.center.x - this.sun.center.x);
+                var dist = Math.sqrt(Math.pow(this.center.x - this.sun.center.x, 2) + Math.pow(this.center.y - this.sun.center.y, 2));
+                angle += this.speed;
+                this.center.x = this.sun.center.x + (dist * Math.cos(angle));
+                this.center.y = this.sun.center.y + (dist * Math.sin(angle));
             }
 
             for (var i = 0; i < this.getDamageLevel(); i ++) {
@@ -120,10 +135,10 @@
             var slope = (this.center.y - source.center.y) / (this.center.x - source.center.x);
             var perp = Math.atan(-1 / slope);
             var result = {
-                x1 : this.center.x + (this.size.x * Math.cos(perp)),
-                y1 : this.center.y + (this.size.y * Math.sin(perp)),
-                x2 : this.center.x - (this.size.x * Math.cos(perp)),
-                y2 : this.center.y - (this.size.y * Math.sin(perp)),
+                x1 : this.center.x + (this.size.x  * this.sizeAdjust * Math.cos(perp)),
+                y1 : this.center.y + (this.size.y * this.sizeAdjust * Math.sin(perp)),
+                x2 : this.center.x - (this.size.x * this.sizeAdjust * Math.cos(perp)),
+                y2 : this.center.y - (this.size.y * this.sizeAdjust * Math.sin(perp)),
                 src : this
             };
             return [result, {

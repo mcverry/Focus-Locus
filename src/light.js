@@ -115,19 +115,7 @@
             //draw polygon
             var i;
 
-            if (this.sprite) {
-                ctx.drawImage(
-                    this.sprite,
-                    0,
-                    0,
-                    this.sprite.width,
-                    this.sprite.height,
-                    this.center.x - (this.sprite.width) + this.spriteOffset.x,
-                    this.center.y - (this.sprite.height >> 1) + this.spriteOffset.y,
-                    this.sprite.width,
-                    this.sprite.height
-                );
-            }
+
 
             if (this.game.debugMode) {
                 ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);

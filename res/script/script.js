@@ -740,14 +740,13 @@ window.Script = {
                 zindex : -1
             });
 
-            for (i = 0; i < 75; i++) {
-                this.coq.entities.create(Light, {
-                    center : {x : 0, y : i * 8},
-                    color : "rgba(255, 255, 220, 0.2)",
-                    numRays : 1,
-                    lineWidth : 8
-                });
-            }
+            this.coq.entities.create(Light, {
+                center : {x : 0, y : 550},
+                color : "rgba(255, 255, 220, 0.2)",
+                numRays : 65,
+                startAngle : Math.PI * 3/4,
+                endAngle : Math.PI * 1.9
+            });
 
             this.coq.entities.create(Lens, {
                 center: {x: 100, y : 300},
@@ -797,17 +796,175 @@ window.Script = {
             if (notFriends.length === 0) {
                 this.scriptState = "level8";
             }
+        },
+        teardown : function(frame) {
+            var lens = this.coq.entities.all(Lens)[0];
+            this.saveLensPositionForLevel8 = {
+                x : lens.center.x,
+                y : lens.center.y
+            };
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
         }
     },
 
     level8 : {
-        //this.audio.play('asteroids', {channel : 'bg', loop : true });
+        setup : function() {
+            this.audio.play('asteroids', {channel : 'bg', loop : true });
+            this.coq.entities.create(Lens, {
+                center: this.saveLensPositionForLevel8 || {x: 100, y : 300},
+                limits : {top : 50, bottom : 500},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.W,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.S,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.A,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.D,
+                        speed : 0.7
+                    }
+                },
+                sprite : this.myLoader.getFile("res/img/hubble.png")
+            });
+
+            delete this.saveLensPositionForLevel8;
+        },
+        teardown : function () {
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
+        }
     },
 
     level9Intro : ScriptUtil.newVideoTransition('asteroids-to-stars', 'level9'),
 
     level9 : {
-        //this.audio.play('stars', {channel : 'bg', loop : true });
+        setup : function() {
+            this.audio.play('stars', {channel : 'bg', loop : true });
+            var hereComesTheSunDoDoDoDo = this.coq.entities.create(Light, {
+                center : {x : 50, y : 300},
+                color : "rgba(255, 255, 220, 0.05)",
+                numRays : 365,
+                sprite : this.myLoader.getFile("res/img/sun.png"),
+                spriteOffset : {x : 24, y : 0}
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 55, y : 300},
+                size : {x : 8, y : 8},
+                sprite : this.myLoader.getFile("res/img/mercury.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                damageThreshold : 3,
+                strength : 500,
+                sun : hereComesTheSunDoDoDoDo,
+                speed : 0.02,
+                sizeAdjust : 0.01,
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 80, y : 300},
+                size : {x : 16, y : 16},
+                sprite : this.myLoader.getFile("res/img/venus.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                damageThreshold : 3,
+                strength : 500,
+                sun : hereComesTheSunDoDoDoDo,
+                speed : 0.015,
+                sizeAdjust : 0.1,
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 190, y : 300},
+                size : {x : 16, y : 16},
+                sprite : this.myLoader.getFile("res/img/spritesheet_earth.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                damageThreshold : 3,
+                strength : 500,
+                sun : hereComesTheSunDoDoDoDo,
+                speed : 0.01,
+                sizeAdjust : 0.33,
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 300, y : 300},
+                size : {x : 16, y : 16},
+                sprite : this.myLoader.getFile("res/img/mars.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                damageThreshold : 3,
+                strength : 500,
+                sun : hereComesTheSunDoDoDoDo,
+                speed : 0.008,
+                sizeAdjust : 0.33,
+                friend : true
+            });
+
+            this.coq.entities.create(Lens, {
+                zindex : 0,
+                center : {x: 400, y : 300},
+                size : {x : 128, y : 128},
+                limits : {top : 50, bottom : 550},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.W,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.S,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.A,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.D,
+                        speed : 0.7
+                    }
+                },
+                friction : {x : 0.95, y: 0.95},
+                sprite : this.myLoader.getFile("res/img/black_hole.png")
+            });
+
+            for (i = 0; i < 25; i ++) {
+                this.coq.entities.create(Asteroid, {
+                    center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
+                    sprite : this.myLoader.getFile("res/img/sun.png"),
+                    size : {x : 32, y: 32},
+                    popSound : 'static',
+                    cookSound : 'static',
+                });
+            }
+        },
+        update : function(frame) {
+            var notFriends = this.coq.entities.all(Asteroid).filter(function(asteroid) {
+                return !asteroid.friend;
+            });
+            notFriends.forEach(function(asteroid){
+                asteroid.center.x -= 1;
+                if (asteroid.center.x <= 0) {
+                    this.coq.entities.destroy(asteroid);
+                }
+            }.bind(this));
+            if (notFriends.length === 0) {
+                this.scriptState = "goodJob";
+            }
+        }
     },
 
     goodJob : ScriptUtil.newVideoTransition('good-job', 'credits'),
