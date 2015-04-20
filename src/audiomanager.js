@@ -1,9 +1,10 @@
 ;(function(exports) {
-    exports.AudioManager = function(game, audio, cbFinish){
+    exports.AudioManager = function(game, audio, cbFinish, cbLoadOne){
         this.audio = {};
         this.playing = {};
 
         this.cbFinish = cbFinish || function() {};
+        this.cbLoadOne = cbLoadOne || function() {};
         this.bg = null;
         this.game = game;
         this.total = audio.length;
@@ -20,6 +21,7 @@
         return function(){
             console.log(x, "loaded");
             that.loaded++;
+            that.cbLoadOne.call(that.game, that.loaded, that.total);
             if (that.loaded >= that.total){
                 that.cbFinish.call(that.game);
             }   

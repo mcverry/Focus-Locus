@@ -124,9 +124,7 @@ window.Script = {
         },
 
         update : function(frame) {
-            console.log(frame);
-            game.loadedPercent = frame / 60;
-            var s = Math.ceil(game.loadedPercent * 12);
+            var s = Math.ceil(game.loadPercent * 12);
             var s2 = 1
             if (s > 6) {
                 s2 = s - 6; 

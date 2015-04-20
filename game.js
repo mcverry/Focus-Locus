@@ -9,6 +9,9 @@ var Game = function() {
 
     this.assetsLoaded = false;
     this.audioLoaded = false;
+    this.audioPercent = 0;
+    this.assetsPercent = 0;
+    this.loadPercent = 0;
 
     //load images, video:
     this.myLoader = html5Preloader();
@@ -21,6 +24,8 @@ var Game = function() {
         this.assetsLoaded = true;
         console.log("image assets loaded")
         this.gotoTitleScreen();
+        this.assetsPercent = 1;
+        this.loadPercent = this.audioPercent / 2 + this.assetsPercent / 2;
     }.bind(this));
 
     //load audio:
@@ -28,6 +33,10 @@ var Game = function() {
         this.audioLoaded = true;
         console.log("audio assests loaded");
         this.gotoTitleScreen();
+    }, function(a, t){
+        this.audioPercent = a / t;
+        this.assetsPercent = this.myLoader.getProgress();
+        this.loadPercent = this.audioPercent / 2 + this.assetsPercent / 2;
     });
 
     this.gotoTitleScreen = function() {
