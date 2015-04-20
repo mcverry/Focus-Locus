@@ -69,6 +69,7 @@ window.ScriptUtil = {
         return function(){
             this.audio.clear();
             this.video.pause();
+            this.video.currentTime = 0;
         };
     }
 };
