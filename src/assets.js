@@ -35,7 +35,7 @@ function getAudio() {
         ['pop', 'audio/pop.mp3', 1],
         ['balloons', 'audio/Battle-Balloons.mp3', 1],
 
-        ['drone', 'audio/Battle-Cars.mp3', 1],
+        ['drones', 'audio/Battle-Cars.mp3', 1],
         ['stars', 'audio/Battle-Stars.mp3', 1],
         ['asteroids', 'audio/Battle-Asteroids.mp3', 1],
         ['curious', 'audio/Curious-Development.mp3', 1]

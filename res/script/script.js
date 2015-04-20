@@ -148,7 +148,7 @@ window.Script = {
 
     level1 : {
         setup : function() {
-            this.audio.play('full', {channel : 'bg', loop : true });
+            this.audio.play('balloons', {channel : 'bg', loop : true });
 
             this.coq.entities.create(Light, {
                 center : {x : 100, y : 300},
@@ -228,8 +228,7 @@ window.Script = {
 
     level2 : {
         setup : function() {
-
-            this.audio.play('full', {channel : "bg", loop : true});
+            this.audio.play('balloons', {channel : "bg", loop : true});
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 400, y : 300},
@@ -283,7 +282,7 @@ window.Script = {
 
     level3 : {
         setup : function() {
-            this.audio.play('full', {channel: 'bg', loop:true});
+            this.audio.play('balloons', {channel: 'bg', loop:true});
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 800, y : 300},
@@ -374,7 +373,7 @@ window.Script = {
 
     level4 : {
         setup : function () {
-            //this.audio.play('full', {channel : 'bg', loop : true });
+            this.audio.play('drones', {channel : 'bg', loop : true });
             this.coq.entities.create(Splash, {
                 source : this.myLoader.getFile('res/img/desert.png'),
                 zindex : -2
@@ -734,6 +733,7 @@ window.Script = {
     level7 : {
         setup : function () {
             var i;
+            this.audio.play('asteroids', {channel : 'bg', loop : true });
 
             this.coq.entities.create(Splash, {
                 source : this.myLoader.getFile('res/img/earth.png'),
@@ -801,13 +801,13 @@ window.Script = {
     },
 
     level8 : {
-
+        //this.audio.play('asteroids', {channel : 'bg', loop : true });
     },
 
     level9Intro : ScriptUtil.newVideoTransition('asteroids-to-stars', 'level9'),
 
     level9 : {
-
+        //this.audio.play('stars', {channel : 'bg', loop : true });
     },
 
     goodJob : ScriptUtil.newVideoTransition('good-job', 'credits'),
