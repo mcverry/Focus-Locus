@@ -24,6 +24,8 @@
         };
         this.numSprites = options.numSprites || this.sprite.height / ((this.size.y) + this.spriteOffset.y);
 
+        this.light = options.light || null;
+
         this.popSound = options.popSound || null;
         this.cookSound = options.cookSound || null;
 
@@ -42,6 +44,9 @@
             if (this.strength <= 0) {
                 //console.log(this.popSound);
                 this.game.audio.play(this.popSound, {channel : this.id});
+                if (this.light) {
+                    this.game.coq.entities.destroy(this.light);
+                }
                 this.game.coq.entities.destroy(this);
             }
             if (this.newDamage > this.damageThreshold) {
@@ -62,6 +67,11 @@
                 angle += this.speed;
                 this.center.x = this.sun.center.x + (dist * Math.cos(angle));
                 this.center.y = this.sun.center.y + (dist * Math.sin(angle));
+            }
+
+            if (this.light) {
+                this.light.center.x = this.center.x;
+                this.light.center.y = this.center.y;
             }
 
             for (var i = 0; i < this.getDamageLevel(); i ++) {
