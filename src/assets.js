@@ -5,9 +5,11 @@ function getAssets(){
             'res/img/focus_splash.png',
             'res/img/spritesheet_earth.png',
             'res/img/zorq_asteroid_1.png',
+            'res/img/zorq_asteroid_2.png',
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
             'res/img/hubble.png',
+            'res/img/earth.png',
             'res/img/desert.png',
             'res/img/hangar.png',
             'res/img/ceiling_lens.png',
@@ -31,7 +33,7 @@ function getAudio() {
         ['static', 'audio/static.mp3', 4],
         ['full', 'audio/I-Can-See-The-Frames-1.0.mp3', 1],
         ['pop', 'audio/Battle-Balloons.mp3', 1]
-    ]
+    ];
 }
 
 function getTimings() {
