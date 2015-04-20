@@ -24,6 +24,8 @@
 
         this.popSound = options.popSound || null;
         this.cookSound = options.cookSound || null;
+
+        this.friend = options.friend || false;
     };
 
     exports.Asteroid.prototype = {
@@ -66,6 +68,7 @@
         },
 
         draw : function (ctx) {
+            var sx, sy, shake;
             if (this.game.debugMode) {
                 ctx.beginPath();
                 ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
@@ -73,15 +76,28 @@
                 ctx.stroke();
             }
 
+            if (this.sprite.width > this.size.x * 2) {
+                sx = this.getDamageLevel() * (this.size.x + this.spriteOffset.x);
+            } else {
+                sx = 0;
+            }
+
+            sy = (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y);
+
+            shake = {
+                x : Math.random() * this.getDamageLevel(),
+                y : Math.random() * this.getDamageLevel()
+            };
+
             if (this.sprite) {
                 ctx.drawImage(
                     this.sprite, //img
-                    this.getDamageLevel() * (this.size.x + this.spriteOffset.x), //sx
-                    (this.currentSprite | 0) * (this.size.y + this.spriteOffset.y), //sy
+                    sx, //sx
+                    sy, //sy
                     this.size.x << 1, //swidth
                     this.size.y << 1, //sheight
-                    this.center.x - (this.size.x), //x
-                    this.center.y - (this.size.y), //y
+                    this.center.x - this.size.x + shake.x, //x
+                    this.center.y - this.size.y + shake.y, //y
                     this.size.x << 1, //width
                     this.size.y << 1//height
                 );

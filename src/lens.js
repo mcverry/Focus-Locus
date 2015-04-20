@@ -19,6 +19,14 @@
              source : this});
         this.rays = [];
         this.bounce = 1;
+
+        this.sprite = options.sprite;
+        this.spriteOffset = options.spriteOffset || {
+            x : 0,
+            y : 0
+        };
+
+        this.zindex = options.zindex || 5;
     };
 
     exports.Lens.prototype = {
@@ -77,10 +85,10 @@
                 }
 
             }
-            if (this.center.y > 600) {
-                this.center.y = 600;
-            } else if (this.center.y < 0) {
-                this.center.y = 0;
+            if (this.center.y > 400) {
+                this.center.y = 400;
+            } else if (this.center.y < 200) {
+                this.center.y = 200;
             }
 
             if (this.focalLength < this.minFocalLength && this.focalLength > 0) {
@@ -90,12 +98,6 @@
             }
 
             this.mirrormode = this.focalLength <= 0;
-
-            //grab new lights
-            var self = this;
-
-            //update existing lights
-
         },
         draw : function(ctx) {
             if (this.game.debugMode) {
@@ -103,6 +105,19 @@
                 ctx.beginPath();
                 ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
                 ctx.stroke();
+            }
+            if (this.sprite) {
+                ctx.drawImage(
+                    this.sprite,
+                    0,
+                    0,
+                    this.sprite.width,
+                    this.sprite.height,
+                    this.center.x - (this.sprite.width >> 1) - this.spriteOffset.x,
+                    this.center.y - (this.sprite.height >> 1) - this.spriteOffset.y,
+                    this.sprite.width,
+                    this.sprite.height
+                );
             }
         },
         getFocusPoint : function(source) {
@@ -116,10 +131,9 @@
             };
         },
         getLightSegments : function(source) {
-            if (this.center.x == source.center.x) {
-                this.center.x += 0.00001;
-            }
-            var slope = (this.center.y - source.center.y) / (this.center.x - source.center.x);
+            var offset = this.center.x == source.center.x ? 0.00001 : 0;
+
+            var slope = (this.center.y - source.center.y) / (this.center.x + offset - source.center.x);
             var perp = Math.atan(-1 / slope);
             var result = {
                     x1 : this.center.x + (this.size.x * Math.cos(perp)),
@@ -128,16 +142,6 @@
                     y2 : this.center.y - (this.size.y * Math.sin(perp)),
                     src : this
                 };
-            this.lt = [
-                {
-                    x : result.x1,
-                    y : result.y1
-                },
-                {
-                    x : result.x2,
-                    y : result.y2
-                }
-            ];
             return [result, {
                 x1 : result.x2,
                 y1 : result.y2,

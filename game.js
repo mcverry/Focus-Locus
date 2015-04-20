@@ -37,7 +37,7 @@ var Game = function() {
     this.oldScriptState = "";
     this.frame = 0;
 
-    this.debugMode = true;
+    this.debugMode = false;
 
     this.update = function() {
         if (this.scriptState != this.oldScriptState) {

@@ -8,7 +8,14 @@ function getAssets(){
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
             'res/img/hubble.png',
+            'res/img/hangar.png',
+            'res/img/ceiling_lens.png',
             'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4',
+            'asteroids-to-stars*:http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.mp4',
+            'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4',
+            'flashlights-to-bombs*:http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.mp4',
+            'good-job*:http://strikesagainst.com/focus-locus/res/vid/good-job.mp4',
+            'static*:res/audio/static.mp3',
             'test*:/res/vid/empire.mp4',
         ];
 }

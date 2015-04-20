@@ -63,7 +63,7 @@ window.ScriptUtil = {
         return function(){
             this.audio.clear();
             this.video.pause();
-        }
+        };
     }
 };
 
@@ -128,7 +128,7 @@ window.Script = {
                 lens.focalLength = 10 + (Math.sin(frame / 100) * 1.5);
             });
             if (this.flagthing && !(this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
-                this.scriptState = "welcome";
+                this.scriptState = "level1Intro";
             } else if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
                 this.flagthing = true;
             }
@@ -138,16 +138,16 @@ window.Script = {
         }
     },
 
-    welcome : ScriptUtil.newVideoTransition('welcome', 'intro'),
+    level1Intro : ScriptUtil.newVideoTransition('welcome', 'level1'),
 
-    intro : {
+    level1 : {
         setup : function() {
 
             this.audio.background('balloons');
             this.audio.add('static');
 
             this.coq.entities.create(Light, {
-                center : {x : 150, y : 300},
+                center : {x : 100, y : 300},
                 color : "rgba(255, 255, 220, 0.2)",
                 numRays : 30,
                 startAngle : -Math.PI / 8,
@@ -159,14 +159,15 @@ window.Script = {
                 center : {x: 300, y : 400},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
                 popSound : 'static',
-                cookSound : 'static'
+                cookSound : 'static',
             });
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 450, y : 300},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
                 popSound : 'static',
-                cookSound : 'static'
+                cookSound : 'static',
+                strength : 3000
             });
 
             this.coq.entities.create(Asteroid, {
@@ -195,31 +196,179 @@ window.Script = {
                         key : this.coq.inputter.RIGHT_ARROW,
                         speed : 0.7
                     }
+                },
+                sprite: this.myLoader.getFile('res/img/ceiling_lens.png'),
+                spriteOffset : {
+                    x : 0,
+                    y : 200
                 }
+            });
+
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/hangar.png'),
+                zindex : -1
             });
         },
         teardown : function() {
 
         },
         update : function(frame) {
-
+            if (this.coq.entities.all(Asteroid).length === 0) {
+                this.scriptState = "level2";
+            }
         },
         draw : function(ctx) {
 
         }
     },
-    fun : {
-        setup : function () {
-            this.coq.entities.create(Light, {
-                center : {x : 150, y : 300},
-                color : "rgba(255, 255, 220, 0.2)",
-                numRays : 30,
-                startAngle : -Math.PI / 8,
-                endAngle : Math.PI / 8,
-                sprite : this.myLoader.getFile("res/img/flashlight.png")
+
+    level2 : {
+        setup : function() {
+
+            this.audio.background('balloons');
+            this.audio.add('static');
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 400, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
             });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 500, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 600, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 700, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/hangar.png'),
+                zindex : -1
+            });
+        },
+        update : function(frame) {
+            if (this.coq.entities.all(Asteroid).filter(function(balloon) {
+                    return !balloon.friend;
+                }).length === 0
+            ) {
+                this.scriptState = "level3";
+            }
+        },
+        teardown : function() {
+            this.coq.entities.all(Asteroid).forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
+        }
+    },
+
+    level3 : {
+        setup : function() {
+            this.audio.background('balloons');
+            this.audio.add('static');
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 400, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 500, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 600, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 700, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/hangar.png'),
+                zindex : -1
+            });
+        },
+        update : function(frame) {
+            var asteroids = this.coq.entities.all(Asteroid);
+            asteroids.forEach(function(balloon){
+                balloon.center.x -= 1;
+            });
+
+            if (asteroids.filter(function(balloon) {
+                    return !balloon.friend;
+                }).length === 0
+            ) {
+                this.scriptState = "level4Intro";
+            }
+        },
+        teardown : function() {
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
+        }
+    },
+
+    level4Intro : ScriptUtil.newVideoTransition('flashlights-to-bombs', 'level4'),
+
+    level4 : {
+
+    },
+
+    level5 : {
+
+    },
+
+    level6 : {
+
+    },
+
+    level7Intro : ScriptUtil.newVideoTransition('bombs-to-asteroids', 'level7'),
+
+    level7 : {
+        setup : function () {
+            this.audio.add('static');
+
+            for (var i = 0; i < 75; i++) {
+                this.coq.entities.create(Light, {
+                    center : {x : 0, y : i * 8},
+                    color : "rgba(255, 255, 220, 0.2)",
+                    numRays : 1,
+                    lineWidth : 8
+                });
+            }
+
             this.coq.entities.create(Lens, {
-                center: {x: 200, y : 300},
+                center: {x: 100, y : 300},
                 movement : {
                     up : {
                         key: this.coq.inputter.UP_ARROW,
@@ -239,17 +388,23 @@ window.Script = {
                     }
                 }
             });
-            for (var i = 0; i < 10; i ++) {
-                for (var j = 0; j < 10; j ++ ){
-                    this.coq.entities.create(Asteroid, {
-                        center : {x: 10 * i, y : 10 * j},
-                        sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
-                        popSound : 'static',
-                        cookSound : 'static',
-                        strength : 100
-                    });
-                }
-            }
+
         }
+    },
+
+    level8 : {
+
+    },
+
+    level9Intro : ScriptUtil.newVideoTransition('asteroids-to-stars', 'level9'),
+
+    level9 : {
+
+    },
+
+    goodJob : ScriptUtil.newVideoTransition('good-job', 'credits'),
+
+    credits : {
+
     }
 };
