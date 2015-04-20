@@ -156,7 +156,7 @@ window.Script = {
             });
 
             this.coq.entities.create(Asteroid, {
-                center : {x: 300, y : 400},
+                center : {x: 300, y : 450},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
                 popSound : 'static',
                 cookSound : 'static',
@@ -280,18 +280,18 @@ window.Script = {
 
     level3 : {
         setup : function() {
-            this.audio.background('balloons');
-            this.audio.add('static');
+            //this.audio.background('balloons');
+            //this.audio.add('static');
 
             this.coq.entities.create(Asteroid, {
-                center : {x: 400, y : 300},
+                center : {x: 800, y : 300},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
                 popSound : 'static',
                 cookSound : 'static',
             });
 
             this.coq.entities.create(Asteroid, {
-                center : {x: 500, y : 300},
+                center : {x: 900, y : 300},
                 sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
                 popSound : 'static',
                 cookSound : 'static',
@@ -299,14 +299,44 @@ window.Script = {
             });
 
             this.coq.entities.create(Asteroid, {
-                center : {x: 600, y : 400},
+                center : {x: 1000, y : 400},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
                 popSound : 'static',
                 cookSound : 'static',
             });
 
             this.coq.entities.create(Asteroid, {
-                center : {x: 700, y : 400},
+                center : {x: 1100, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 1200, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 1300, y : 300},
+                sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
+                popSound : 'static',
+                cookSound : 'static',
+                friend : true
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 1400, y : 400},
+                sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                popSound : 'static',
+                cookSound : 'static',
+            });
+
+            this.coq.entities.create(Asteroid, {
+                center : {x: 1500, y : 400},
                 sprite : this.myLoader.getFile("res/img/balloon_yellow.png"),
                 popSound : 'static',
                 cookSound : 'static',
