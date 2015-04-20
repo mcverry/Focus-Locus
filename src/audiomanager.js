@@ -36,20 +36,6 @@
 
     exports.AudioManager.prototype.background = function(aid) {
   
-        
-        if (this.bgloop) {
-            this.bgloop.stop();
-        }
-        
-        var a = this.game.myLoader.getFile(aid);
-        if (!a){
-            console.log('no such audio ' + aid);
-            return false;
-        }
-
-        this.bgloop = new SeamlessLoop();
-        this.bgloop.addDom(a, this.timings[aid], "bg");
-        this.bgloop.start("bg");
     },
 
 
