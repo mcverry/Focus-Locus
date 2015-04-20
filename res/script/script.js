@@ -138,7 +138,7 @@ window.Script = {
         }
     },
 
-    welcome : ScriptUtil.newVideoTransition('test', 'intro'),
+    welcome : ScriptUtil.newVideoTransition('welcome', 'intro'),
 
     intro : {
         setup : function() {
@@ -206,6 +206,50 @@ window.Script = {
         },
         draw : function(ctx) {
 
+        }
+    },
+    fun : {
+        setup : function () {
+            this.coq.entities.create(Light, {
+                center : {x : 150, y : 300},
+                color : "rgba(255, 255, 220, 0.2)",
+                numRays : 30,
+                startAngle : -Math.PI / 8,
+                endAngle : Math.PI / 8,
+                sprite : this.myLoader.getFile("res/img/flashlight.png")
+            });
+            this.coq.entities.create(Lens, {
+                center: {x: 200, y : 300},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.UP_ARROW,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.DOWN_ARROW,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.LEFT_ARROW,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.RIGHT_ARROW,
+                        speed : 0.7
+                    }
+                }
+            });
+            for (var i = 0; i < 10; i ++) {
+                for (var j = 0; j < 10; j ++ ){
+                    this.coq.entities.create(Asteroid, {
+                        center : {x: 10 * i, y : 10 * j},
+                        sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                        popSound : 'static',
+                        cookSound : 'static',
+                        strength : 100
+                    });
+                }
+            }
         }
     }
 };
