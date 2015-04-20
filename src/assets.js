@@ -32,7 +32,13 @@ function getAudio() {
     return [
         ['static', 'audio/static.mp3', 4],
         ['full', 'audio/I-Can-See-The-Frames-1.0.mp3', 1],
-        ['pop', 'audio/Battle-Balloons.mp3', 1]
+        ['pop', 'audio/pop.mp3', 1],
+        ['balloons', 'audio/Battle-Balloons.mp3', 1],
+
+        ['drone', 'audio/Battle-Cars.mp3', 1],
+        ['stars', 'audio/Battle-Stars.mp3', 1],
+        ['asteroids', 'audio/Battle-Asteroids.mp3', 1],
+        ['curious', 'audio/Curious-Development.mp3', 1]
     ];
 }
 

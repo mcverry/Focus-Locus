@@ -9,14 +9,16 @@
         this.total = audio.length;
         this.loaded = 0;
 
+        console.log(this.total);
         for (var i = 0; i < audio.length; i++){
             this.loads(audio[i]);
         }
     };
 
-    exports.AudioManager.prototype._cbSoundLoaded = function (){
+    exports.AudioManager.prototype._cbSoundLoaded = function (x){
         var that = this;
         return function(){
+            console.log(x, "loaded");
             that.loaded++;
             if (that.loaded >= that.total){
                 that.cbFinish.call(that.game);
@@ -24,10 +26,17 @@
         }
     }
 
+    exports.AudioManager.prototype._cbSoundFailedToLoad = function(x){
+        return function() {
+            console.log(x, "failed to load");
+        };
+    }
+
     exports.AudioManager.prototype.loads = function(aud) {
         this.audio[aud[0]] = new Howl({
                 urls: [this.game.prefixRes + aud[1]],
-                onload : this._cbSoundLoaded()
+                onload : this._cbSoundLoaded(aud),
+                onerror : this._cbSoundFailedToLoad(aud)
             });
     }
 
@@ -64,11 +73,10 @@
 
 
     exports.AudioManager.prototype.clear = function() {
-        for (var a in this.audio){
-            for (var t in a.playing){
-                a.sound.stop(t);
-            }
+        for (var a in this.playing){
+            this.playing[a].sound.stop();
         }
+        this.playing = {};
     };
 
 })(window);
