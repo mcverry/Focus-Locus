@@ -195,6 +195,11 @@ window.Script = {
                         key : this.coq.inputter.RIGHT_ARROW,
                         speed : 0.7
                     }
+                },
+                sprite: this.myLoader.getFile('res/img/ceiling_lens.png'),
+                spriteOffset : {
+                    x : 0,
+                    y : 324
                 }
             });
 
@@ -207,7 +212,9 @@ window.Script = {
 
         },
         update : function(frame) {
-
+            if (this.coq.entities.all(Asteroid).length === 0) {
+                this.scriptState = "level2";
+            }
         },
         draw : function(ctx) {
 

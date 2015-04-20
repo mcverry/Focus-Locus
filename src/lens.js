@@ -19,6 +19,14 @@
              source : this});
         this.rays = [];
         this.bounce = 1;
+
+        this.sprite = options.sprite;
+        this.spriteOffset = options.spriteOffset || {
+            x : 0,
+            y : 0
+        };
+
+        this.zindex = options.zindex || 5;
     };
 
     exports.Lens.prototype = {
@@ -90,12 +98,6 @@
             }
 
             this.mirrormode = this.focalLength <= 0;
-
-            //grab new lights
-            var self = this;
-
-            //update existing lights
-
         },
         draw : function(ctx) {
             if (this.game.debugMode) {
@@ -103,6 +105,19 @@
                 ctx.beginPath();
                 ctx.arc(this.center.x, this.center.y, this.size.x, 0, Math.PI *2);
                 ctx.stroke();
+            }
+            if (this.sprite) {
+                ctx.drawImage(
+                    this.sprite,
+                    0,
+                    0,
+                    this.sprite.width,
+                    this.sprite.height,
+                    this.center.x - (this.sprite.width >> 1) - this.spriteOffset.x,
+                    this.center.y - (this.sprite.height >> 1) - this.spriteOffset.y,
+                    this.sprite.width,
+                    this.sprite.height
+                );
             }
         },
         getFocusPoint : function(source) {
