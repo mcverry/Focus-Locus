@@ -24,6 +24,8 @@
 
         this.popSound = options.popSound || null;
         this.cookSound = options.cookSound || null;
+
+        this.friend = options.friend || false;
     };
 
     exports.Asteroid.prototype = {

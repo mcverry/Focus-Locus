@@ -85,10 +85,10 @@
                 }
 
             }
-            if (this.center.y > 600) {
-                this.center.y = 600;
-            } else if (this.center.y < 0) {
-                this.center.y = 0;
+            if (this.center.y > 400) {
+                this.center.y = 400;
+            } else if (this.center.y < 200) {
+                this.center.y = 200;
             }
 
             if (this.focalLength < this.minFocalLength && this.focalLength > 0) {
