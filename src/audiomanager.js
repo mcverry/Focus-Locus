@@ -57,10 +57,9 @@
             return false;
         }
 
-        console.log("playing ", aid, " on channel ", track, ":", loop, volume);
-        s.play(this._cbPlay(s, track));
         s.volume(volume); 
         s.loop(loop);  
+        s.play(this._cbPlay(s, track));
     };
 
 

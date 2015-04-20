@@ -33,9 +33,8 @@
     exports.Asteroid.prototype = {
         update : function(){
             if (this.strength <= 0) {
-                console.log(this);
-                console.log(this.popSound);
-                console.log(this.game.audio.play(this.popSound, {channel : this.id}));
+                //console.log(this.popSound);
+                this.game.audio.play(this.popSound, {channel : this.id});
                 this.game.coq.entities.destroy(this);
             }
             if (this.newDamage > this.damageThreshold) {

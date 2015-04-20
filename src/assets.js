@@ -27,7 +27,7 @@ function getAssets(){
 function getAudio() {
     return [
         ['static', 'audio/static.mp3', 4],
-        ['balloons', 'audio/I-Can-See-The-Frames-1.0.mp3', 1],
+        ['full', 'audio/I-Can-See-The-Frames-1.0.mp3', 1],
         ['pop', 'audio/Battle-Balloons.mp3', 1]
     ]
 }
