@@ -18,6 +18,8 @@ function getAssets(){
             'res/img/ceiling_lens.png',
             "res/img/black_hole.png",
             'res/img/lens.png',
+            'res/img/webb.png',
+            'res/img/credits.png',
             'res/img/sun.png',
             'res/img/hot_air_balloon_1.png',
             'res/img/hot_air_balloon_2.png',

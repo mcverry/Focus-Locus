@@ -4,7 +4,7 @@
 
         this.game = game;
 
-        this.center = options.center;
+        this.center = options.center || {x : 0, y : 0};
         this.color = options.color || "red";
         this.strength = options.strength || 6;
         this.intersects = [];
@@ -23,6 +23,8 @@
         } else {
             this.rays = options.rays;
         }
+
+        this.on = !options.off;
 
         this.zindex = options.zindex || 0;
 
@@ -59,6 +61,9 @@
         },
 
         update : function() {
+            if (!this.on) {
+                return;
+            }
             this.intersects = [];
             var segments = [];
 
@@ -73,7 +78,7 @@
             }.bind(this));
 
             //add outside of box
-            var buffer = 10;
+            var buffer = this.game.scriptState == "level9" ? 2000 : 10;
             segments.push({x1 : -buffer, y1 : -buffer, x2 : 800 + buffer, y2: -buffer, src: false});
             segments.push({x1 : 800 + buffer, y1 : -buffer, x2 : 800 + buffer, y2: 600 + buffer, src : false});
             segments.push({x1 : 800 + buffer, y1 : 600 + buffer, x2 : -buffer, y2: 600 + buffer, src : false});
@@ -85,6 +90,12 @@
                 var closestIntersect = null;
 
                 for(var i = 0; i < segments.length; i++){
+                    if (segments[i].src &&
+                        segments[i].src instanceof Asteroid &&
+                        segments[i].src.light == this
+                    ) {
+                        continue;
+                    }
                     var intersect = getIntersection(ray, segments[i]);
                     if(!intersect) continue;
                     if(!closestIntersect || intersect.param < closestIntersect.param){
@@ -111,6 +122,9 @@
         },
 
         draw : function(ctx) {
+            if (!this.on) {
+                return;
+            }
             if(this.intersects.length === 0) return;
             //draw polygon
             var i;

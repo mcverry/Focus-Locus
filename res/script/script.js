@@ -779,8 +779,8 @@ window.Script = {
                     sprite : this.myLoader.getFile("res/img/zorq_asteroid_1.png"),
                     popSound : 'static',
                     cookSound : 'static',
-                    damageThreshold : 3,
-                    strength : 500
+                    damageThreshold : 2,
+                    strength : 300
                 });
             }
         },
@@ -813,6 +813,15 @@ window.Script = {
     level8 : {
         setup : function() {
             this.audio.play('asteroids', {channel : 'bg', loop : true });
+
+            this.coq.entities.create(Light, {
+                center : {x : 0, y : 550},
+                color : "rgba(255, 255, 220, 0.2)",
+                numRays : 65,
+                startAngle : Math.PI * 3/4,
+                endAngle : Math.PI * 1.9
+            });
+
             this.coq.entities.create(Lens, {
                 center: this.saveLensPositionForLevel8 || {x: 100, y : 300},
                 limits : {top : 50, bottom : 500},
@@ -837,7 +846,56 @@ window.Script = {
                 sprite : this.myLoader.getFile("res/img/hubble.png")
             });
 
+            this.coq.entities.create(Lens, {
+                center: {x: 200, y : 300},
+                limits : {top : 50, bottom : 500},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.I,
+                        speed : 0.3
+                    },
+                    down : {
+                        key : this.coq.inputter.K,
+                        speed : 0.3
+                    },
+                    left : {
+                        key : this.coq.inputter.J,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.L,
+                        speed : 0.7
+                    }
+                },
+                sprite : this.myLoader.getFile("res/img/webb.png")
+            });
+
+            for (i = 0; i < 30; i ++) {
+                this.coq.entities.create(Asteroid, {
+                    center : {x: 800 + i * (100 + Math.random() * 50), y: 30 + Math.random()  * 225},
+                    sprite : this.myLoader.getFile("res/img/zorq_asteroid_1.png"),
+                    popSound : 'static',
+                    cookSound : 'static',
+                    damageThreshold : 2,
+                    strength : 300
+                });
+            }
+
             delete this.saveLensPositionForLevel8;
+        },
+        update : function(frame) {
+            var notFriends = this.coq.entities.all(Asteroid).filter(function(asteroid) {
+                return !asteroid.friend;
+            });
+            notFriends.forEach(function(asteroid){
+                asteroid.center.x -= 1;
+                if (asteroid.center.x <= 0) {
+                    this.coq.entities.destroy(asteroid);
+                }
+            }.bind(this));
+            if (notFriends.length === 0) {
+                this.scriptState = "level9Intro";
+            }
         },
         teardown : function () {
             this.coq.entities.all().forEach(function(entity) {
@@ -854,7 +912,7 @@ window.Script = {
             var hereComesTheSunDoDoDoDo = this.coq.entities.create(Light, {
                 center : {x : 50, y : 300},
                 color : "rgba(255, 255, 220, 0.05)",
-                numRays : 365,
+                numRays : 179,
                 sprite : this.myLoader.getFile("res/img/sun.png"),
                 spriteOffset : {x : 24, y : 0}
             });
@@ -915,6 +973,23 @@ window.Script = {
                 friend : true
             });
 
+            for (i = 0; i < 25; i ++) {
+                this.coq.entities.create(Asteroid, {
+                    center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
+                    sprite : this.myLoader.getFile("res/img/sun.png"),
+                    size : {x : 32, y: 32},
+                    popSound : 'static',
+                    cookSound : 'static',
+                    light : this.coq.entities.create(Light, {
+                        numRays : 179,
+                        color : "rgba(255, 220, 220, 0.1)",
+                        startAngle : 0,
+                        endAngle : Math.PI * 2,
+                        off : true
+                    })
+                });
+            }
+
             this.coq.entities.create(Lens, {
                 zindex : 0,
                 center : {x: 400, y : 300},
@@ -941,16 +1016,6 @@ window.Script = {
                 friction : {x : 0.95, y: 0.95},
                 sprite : this.myLoader.getFile("res/img/black_hole.png")
             });
-
-            for (i = 0; i < 25; i ++) {
-                this.coq.entities.create(Asteroid, {
-                    center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
-                    sprite : this.myLoader.getFile("res/img/sun.png"),
-                    size : {x : 32, y: 32},
-                    popSound : 'static',
-                    cookSound : 'static',
-                });
-            }
         },
         update : function(frame) {
             var notFriends = this.coq.entities.all(Asteroid).filter(function(asteroid) {
@@ -959,18 +1024,33 @@ window.Script = {
             notFriends.forEach(function(asteroid){
                 asteroid.center.x -= 1;
                 if (asteroid.center.x <= 0) {
+                    if (asteroid.light) {
+                        this.coq.entities.destroy(asteroid.light);
+                    }
                     this.coq.entities.destroy(asteroid);
+                } else if (asteroid.light && asteroid.center.x < 832 && !asteroid.light.on) {
+                    asteroid.light.on = true;
                 }
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "goodJob";
             }
+        },
+        teardown : function () {
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
         }
     },
 
     goodJob : ScriptUtil.newVideoTransition('good-job', 'credits'),
 
     credits : {
-
+        setup : function () {
+            this.coq.entities.create(Splash, {
+                    source : this.myLoader.getFile('res/img/credits.png'),
+                    zindex : 2
+            });
+        }
     }
 };
