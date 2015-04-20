@@ -35,7 +35,7 @@ window.ScriptUtil = {
             this.video = this.myLoader.getFile(videoid);
             this.audio.clear();
             this.video.play();
-
+            this.skipVideoFlag = false;
             var ctx = this.coq.renderer._ctx;
             this.viddraw = {
                     staticplay : false,
@@ -44,6 +44,7 @@ window.ScriptUtil = {
                     x : (ctx.canvas.width - this.video.videoWidth) / 2,
                     y : (ctx.canvas.height - this.video.videoHeight) / 2
             };
+            console.log(this)
         };
     },
 
@@ -57,7 +58,9 @@ window.ScriptUtil = {
                 this.scriptState = nextState;
             } else if ((this.skipVideoFlag && !this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
                 //todo tear down video
+                this.skipVideoFlag = false;
                 this.scriptState = nextState;
+                console.log("video skipped")
             }
         };
     },
@@ -131,8 +134,7 @@ window.Script = {
                 lens.focalLength = 10 + (Math.sin(frame / 100) * 1.5);
             });
             if (this.flagthing && !(this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
-                //this.scriptState = "level1Intro";
-                this.scriptState = "level7"
+                this.scriptState = this.startHere;
             } else if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
                 this.flagthing = true;
             }
@@ -372,6 +374,7 @@ window.Script = {
 
     level4 : {
         setup : function () {
+            //this.audio.play('full', {channel : 'bg', loop : true });
             this.coq.entities.create(Splash, {
                 source : this.myLoader.getFile('res/img/desert.png'),
                 zindex : -2

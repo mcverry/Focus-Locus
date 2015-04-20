@@ -64,11 +64,10 @@
 
 
     exports.AudioManager.prototype.clear = function() {
-        for (var a in this.audio){
-            for (var t in a.playing){
-                a.sound.stop(t);
-            }
+        for (var a in this.playing){
+            this.playing[a].sound.stop();
         }
+        this.playing = {};
     };
 
 })(window);
