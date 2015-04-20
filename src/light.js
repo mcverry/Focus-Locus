@@ -15,6 +15,8 @@
         this.startAngle = options.startAngle % (Math.PI * 2) || 0;
         this.endAngle = options.endAngle % (Math.PI * 2) || Math.PI * 2;
 
+        this.lineWidth = options.lineWidth || 20;
+
         this.rays = [];
         if (! options.rays) {
             this.makeRadial(options.numRays || 100);
@@ -108,13 +110,13 @@
                 ctx.fillRect(this.center.x - 3, this.center.y - 3, 6, 6);
             }
 
-            ctx.lineWidth = 20;
+            ctx.lineWidth = this.lineWidth;
 
             if (this.radial) {
                 for (i = 0; i < this.intersects.length; i++) {
                     ctx.beginPath();
                     ctx.strokeStyle = this.rays[i].color;
-                    ctx.moveTo(this.rays[i].x1, this.rays[i].y1);
+                    ctx.moveTo(this.rays[i].x1 | 0, this.rays[i].y1 | 0);
                     ctx.lineTo(this.intersects[i].x, this.intersects[i].y);
                     ctx.stroke();
                 }

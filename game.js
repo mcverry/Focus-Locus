@@ -11,7 +11,7 @@ var Game = function() {
         this.scriptState = "titleScreen";
     }.bind(this));
 
-    this.audio = new AudioManager(this, getTimings()); 
+    this.audio = new AudioManager(this, getTimings());
 
     this.scriptState = "loading";
     this.oldScriptState = "";
