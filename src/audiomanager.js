@@ -3,13 +3,13 @@
         this.audio = {};
         this.bg = null;
         this.game = game;
-        this.timings = timings
-    }
+        this.timings = timings;
+    };
 
     exports.AudioManager.prototype.clear = function(){
         this.audio = {};
-    }
-   
+    };
+
     exports.AudioManager.prototype.add = function(aid, options) {
         if (options === undefined) {
             options = {};
@@ -19,7 +19,7 @@
 
         var aud = {
             tracks : [],
-            playmax : playmax,  
+            playmax : playmax,
             playcount : 0
         };
 
@@ -29,18 +29,18 @@
         }
 
         for (var i = 0; i < numtracks; i++) {
-            aud.tracks.push(a.cloneNode(true)); 
+            aud.tracks.push(a.cloneNode(true));
         }
         this.audio[aid] = aud;
-    }
+    };
 
     exports.AudioManager.prototype.background = function(aid) {
-  
+
     },
 
 
     exports.AudioManager.prototype.play = function(aid) {
-        
+
         var a = this.audio[aid];
         if (a === undefined) {
             return undefined;
@@ -49,7 +49,7 @@
         if (a.playmax > 0 && a.playcount >= a.playmax) {
             return false;
         }
-        
+
         for (var i = 0; i < a.tracks.length; i++){
             if (a.tracks[i].paused) {
                 a.tracks[i].play();
@@ -58,6 +58,6 @@
             }
         }
         return false;
-    }
+    };
 
 })(window);

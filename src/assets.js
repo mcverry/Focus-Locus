@@ -8,7 +8,7 @@ function getAssets(){
             'res/img/balloon_pink.png',
             'res/img/flashlight.png',
             'res/img/hubble.png',
-            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4', 
+            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4',
             'static*:res/audio/static.mp3',
             'test*:/res/vid/empire.mp4',
             'epic*:/res/audio/I-Can-See-The-Frames-1.0.mp3',
@@ -20,5 +20,5 @@ function getTimings() {
     return {
         balloons : 26000,
         epic : 26500,
-    }
+    };
 }
