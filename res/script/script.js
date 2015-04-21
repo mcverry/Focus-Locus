@@ -285,6 +285,33 @@ window.Script = {
                 sprite : this.myLoader.getFile("res/img/flashlight.png")
             });
 
+            this.coq.entities.create(Lens, {
+                center: {x: 200, y : 300},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.W,
+                        speed : 0.1
+                    },
+                    down : {
+                        key : this.coq.inputter.S,
+                        speed : 0.1
+                    },
+                    left : {
+                        key : this.coq.inputter.A,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.D,
+                        speed : 0.7
+                    }
+                },
+                sprite: this.myLoader.getFile('res/img/ceiling_lens.png'),
+                spriteOffset : {
+                    x : 0,
+                    y : 200
+                }
+            });
+
             this.numFriends = 2;
 
             this.coq.entities.create(Asteroid, {
@@ -360,6 +387,33 @@ window.Script = {
                 startAngle : -Math.PI / 8,
                 endAngle : Math.PI / 8,
                 sprite : this.myLoader.getFile("res/img/flashlight.png")
+            });
+
+            this.coq.entities.create(Lens, {
+                center: {x: 200, y : 300},
+                movement : {
+                    up : {
+                        key: this.coq.inputter.W,
+                        speed : 0.1
+                    },
+                    down : {
+                        key : this.coq.inputter.S,
+                        speed : 0.1
+                    },
+                    left : {
+                        key : this.coq.inputter.A,
+                        speed : 0.7
+                    },
+                    right : {
+                        key : this.coq.inputter.D,
+                        speed : 0.7
+                    }
+                },
+                sprite: this.myLoader.getFile('res/img/ceiling_lens.png'),
+                spriteOffset : {
+                    x : 0,
+                    y : 200
+                }
             });
 
             this.coq.entities.create(Asteroid, {
