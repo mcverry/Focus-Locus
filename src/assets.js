@@ -32,8 +32,7 @@ function getAssets(){
             'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4',
             'flashlights-to-bombs*:http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.mp4',
             'good-job*:http://strikesagainst.com/focus-locus/res/vid/good-job.mp4',
-            'static*:res/audio/static.mp3',
-            'test*:/res/vid/empire.mp4',
+            'static*:res/audio/static.mp3'
         ];
 }
 
