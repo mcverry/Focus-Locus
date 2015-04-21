@@ -586,7 +586,7 @@ window.Script = {
             for (var i = 0; i < 20; i ++) {
                 this.coq.entities.create(Asteroid, {
                     center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
-                    sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                    sprite : this.myLoader.getFile("res/img/drone.png"),
                     popSound : 'static',
                     cookSound : 'static',
                     damageThreshold : 3,
@@ -724,7 +724,7 @@ window.Script = {
             for (var i = 0; i < 25; i ++) {
                 this.coq.entities.create(Asteroid, {
                     center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
-                    sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                    sprite : this.myLoader.getFile("res/img/drone.png"),
                     popSound : 'static',
                     cookSound : 'static',
                     damageThreshold : 3,
@@ -867,7 +867,7 @@ window.Script = {
             for (var i = 0; i < 25; i ++) {
                 this.coq.entities.create(Asteroid, {
                     center : {x: 800 + i * (100 + Math.random() * 50), y: 50 + Math.random()  * 225},
-                    sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
+                    sprite : this.myLoader.getFile("res/img/drone.png"),
                     popSound : 'static',
                     cookSound : 'static',
                     damageThreshold : 3,

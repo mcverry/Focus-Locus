@@ -21,19 +21,19 @@ function getAssets(){
             "res/img/black_hole.png",
             'res/img/lens.png',
             'res/img/webb.png',
+            'res/img/drone.png',
             'res/img/credits.png',
             'res/img/sun.png',
             'res/img/hot_air_balloon_1.png',
             'res/img/hot_air_balloon_2.png',
             'res/img/big_flashlight.png',
             'res/img/desert_front.png',
-            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4',
-            'asteroids-to-stars*:http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.mp4',
-            'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4',
-            'flashlights-to-bombs*:http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.mp4',
-            'good-job*:http://strikesagainst.com/focus-locus/res/vid/good-job.mp4',
-            'static*:res/audio/static.mp3'
-        ];
+            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4||http://strikesagainst.com/focus-locus/res/vid/welcome.webm||http://strikesagainst.com/focus-locus/res/vid/welcome.ogg',
+            'asteroids-to-stars*:http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.mp4||http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.webm||http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.ogg',
+            'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4||http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.webm||http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.ogg',
+            'flashlights-to-bombs*:http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.mp4||http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.webm||http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.ogg',
+            'good-job*:http://strikesagainst.com/focus-locus/res/vid/good-job.mp4||http://strikesagainst.com/focus-locus/res/vid/good-job.webm||http://strikesagainst.com/focus-locus/res/vid/good-job.ogg',
+         ];
 }
 
 function getAudio() {
