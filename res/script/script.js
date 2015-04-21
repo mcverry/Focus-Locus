@@ -187,6 +187,7 @@ window.Script = {
 
     level1 : {
         setup : function() {
+            console.log("LEVEL1")
             this.audio.play('balloons', {channel : 'bg', loop : true });
 
             this.coq.entities.create(Light, {
@@ -269,6 +270,7 @@ window.Script = {
 
     level2 : {
         setup : function() {
+            console.log("LEVEL2")
             this.audio.play('balloons', {channel : "bg", loop : true});
 
             this.coq.entities.create(Splash, {
@@ -368,7 +370,7 @@ window.Script = {
             }
         },
         teardown : function() {
-            this.coq.entities.all(Asteroid).forEach(function(entity) {
+            this.coq.entities.all().forEach(function(entity) {
                 this.coq.entities.destroy(entity);
             }.bind(this));
         }
@@ -376,6 +378,7 @@ window.Script = {
 
     level3 : {
         setup : function() {
+            console.log("LEVEL3")
             this.audio.play('balloons', {channel: 'bg', loop:true});
 
             this.numFriends = 4;
