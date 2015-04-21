@@ -73,7 +73,7 @@ window.ScriptUtil = {
         };
     },
 
-    loadScreenRedLight : function(strength){ 
+    loadScreenRedLight : function(strength){
         return this.coq.entities.create(Light, {
             center : {x : 150, y : 200},
             color : "rgba(255, 0, 0, 0.3)",
@@ -84,7 +84,7 @@ window.ScriptUtil = {
             sprite : this.myLoader.getFile("res/img/hubble.png")
         });
     },
-    loadScreenGreenLight : function(strength) { 
+    loadScreenGreenLight : function(strength) {
         return this.coq.entities.create(Light, {
             center : {x : 150, y : 400},
             color : "rgba(0, 255, 0, 0.3)",
@@ -127,7 +127,7 @@ window.Script = {
             var s = Math.ceil(game.loadPercent * 12);
             var s2 = 1
             if (s > 6) {
-                s2 = s - 6; 
+                s2 = s - 6;
                 s = 6;
             }
             if (s2 != this.s2p)
@@ -269,6 +269,13 @@ window.Script = {
         setup : function() {
             this.audio.play('balloons', {channel : "bg", loop : true});
 
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/dont_pop.png'),
+                zindex : 6
+            });
+
+            this.numFriends = 2;
+
             this.coq.entities.create(Asteroid, {
                 center : {x: 400, y : 300},
                 sprite : this.myLoader.getFile("res/img/balloon_orange.png"),
@@ -305,7 +312,17 @@ window.Script = {
             });
         },
         update : function(frame) {
-            if (this.coq.entities.all(Asteroid).filter(function(balloon) {
+            var asteroids = this.coq.entities.all(Asteroid);
+
+            if (asteroids.filter(function(balloon) {
+                    return balloon.friend;
+                }).length < this.numFriends
+            ) {
+                this.returnToScriptState = "level2";
+                this.scriptState = "lose";
+            }
+
+            if (asteroids.filter(function(balloon) {
                     return !balloon.friend;
                 }).length === 0
             ) {
@@ -322,6 +339,8 @@ window.Script = {
     level3 : {
         setup : function() {
             this.audio.play('balloons', {channel: 'bg', loop:true});
+
+            this.numFriends = 4;
 
             this.coq.entities.create(Asteroid, {
                 center : {x: 800, y : 300},
@@ -387,18 +406,37 @@ window.Script = {
                 source : this.myLoader.getFile('res/img/hangar.png'),
                 zindex : -1
             });
+            this.fails = 0;
         },
         update : function(frame) {
             var asteroids = this.coq.entities.all(Asteroid);
+
             asteroids.forEach(function(balloon){
                 balloon.center.x -= 1;
+                if (balloon.center.x <= 0) {
+                    this.fails += 1;
+                    this.coq.entities.destroy(balloon);
+                }
             });
+
+            if (asteroids.filter(function(balloon) {
+                    return balloon.friend;
+                }).length < this.numFriends
+            ) {
+                this.returnToScriptState = "level3";
+                this.scriptState = "lose";
+            }
 
             if (asteroids.filter(function(balloon) {
                     return !balloon.friend;
                 }).length === 0
             ) {
                 this.scriptState = "level4Intro";
+            }
+
+            if (this.fails > 0) {
+                this.returnToScriptState = "level3";
+                this.scriptState = "lose";
             }
         },
         teardown : function() {
@@ -478,6 +516,8 @@ window.Script = {
                     strength : 500
                 });
             }
+
+            this.fails = 0;
         },
         update : function(frame) {
             var notFriends = this.coq.entities.all(Asteroid).filter(function(balloon) {
@@ -486,11 +526,16 @@ window.Script = {
             notFriends.forEach(function(balloon){
                 balloon.center.x -= 1;
                 if (balloon.center.x <= 0) {
+                    this.fails += 1;
                     this.coq.entities.destroy(balloon);
                 }
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "level5";
+            }
+            if (this.fails > 3) {
+                this.returnToScriptState = "level4";
+                this.scriptState = "lose";
             }
         },
         teardown : function () {
@@ -610,6 +655,8 @@ window.Script = {
                 });
             }
 
+            this.fails = 0;
+
             delete this.saveLensPositionForLevel5;
         },
         update : function(frame) {
@@ -619,11 +666,16 @@ window.Script = {
             notFriends.forEach(function(balloon){
                 balloon.center.x -= 1;
                 if (balloon.center.x <= 0) {
+                    this.fails += 1;
                     this.coq.entities.destroy(balloon);
                 }
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "level6";
+            }
+            if (this.fails > 3) {
+                this.returnToScriptState = "level5";
+                this.scriptState = "lose";
             }
         },
         teardown : function() {
@@ -745,6 +797,8 @@ window.Script = {
                     strength : 500
                 });
             }
+
+            this.fails = 0;
         },
         update : function(frame) {
             var notFriends = this.coq.entities.all(Asteroid).filter(function(balloon) {
@@ -753,11 +807,16 @@ window.Script = {
             notFriends.forEach(function(balloon){
                 balloon.center.x -= 1;
                 if (balloon.center.x <= 0) {
+                    this.fails += 1;
                     this.coq.entities.destroy(balloon);
                 }
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "level7Intro";
+            }
+            if (this.fails > 3) {
+                this.returnToScriptState = "level6";
+                this.scriptState = "lose";
             }
         },
         teardown : function() {
@@ -782,7 +841,7 @@ window.Script = {
             this.coq.entities.create(Light, {
                 center : {x : 0, y : 550},
                 color : "rgba(255, 255, 220, 0.2)",
-                numRays : 65,
+                numRays : 120,
                 startAngle : Math.PI * 3/4,
                 endAngle : Math.PI * 1.9
             });
@@ -818,9 +877,11 @@ window.Script = {
                     popSound : 'static',
                     cookSound : 'static',
                     damageThreshold : 2,
-                    strength : 300
+                    strength : 200
                 });
             }
+
+            this.fails = 0;
         },
         update : function(frame) {
             var notFriends = this.coq.entities.all(Asteroid).filter(function(asteroid) {
@@ -834,6 +895,10 @@ window.Script = {
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "level8";
+            }
+            if (this.fails > 3) {
+                this.returnToScriptState = "level7";
+                this.scriptState = "lose";
             }
         },
         teardown : function(frame) {
@@ -852,10 +917,15 @@ window.Script = {
         setup : function() {
             this.audio.play('asteroids', {channel : 'bg', loop : true });
 
+            this.coq.entities.create(Splash, {
+                source : this.myLoader.getFile('res/img/earth.png'),
+                zindex : -1
+            });
+
             this.coq.entities.create(Light, {
                 center : {x : 0, y : 550},
                 color : "rgba(255, 255, 220, 0.2)",
-                numRays : 65,
+                numRays : 120,
                 startAngle : Math.PI * 3/4,
                 endAngle : Math.PI * 1.9
             });
@@ -915,9 +985,11 @@ window.Script = {
                     popSound : 'static',
                     cookSound : 'static',
                     damageThreshold : 2,
-                    strength : 300
+                    strength : 200
                 });
             }
+
+            this.fails = 0;
 
             delete this.saveLensPositionForLevel8;
         },
@@ -926,13 +998,19 @@ window.Script = {
                 return !asteroid.friend;
             });
             notFriends.forEach(function(asteroid){
-                asteroid.center.x -= 1;
+                asteroid.center.x -= 2;
                 if (asteroid.center.x <= 0) {
+                    this.fails += 1;
                     this.coq.entities.destroy(asteroid);
                 }
             }.bind(this));
             if (notFriends.length === 0) {
                 this.scriptState = "level9Intro";
+            }
+
+            if (this.fails > 3) {
+                this.returnToScriptState = "level8";
+                this.scriptState = "lose";
             }
         },
         teardown : function () {
@@ -1066,6 +1144,8 @@ window.Script = {
                         this.coq.entities.destroy(asteroid.light);
                     }
                     this.coq.entities.destroy(asteroid);
+                    this.returnToScriptState = "level9";
+                    this.scriptState = "lose";
                 } else if (asteroid.light && asteroid.center.x < 832 && !asteroid.light.on) {
                     asteroid.light.on = true;
                 }
@@ -1089,6 +1169,31 @@ window.Script = {
                     source : this.myLoader.getFile('res/img/credits.png'),
                     zindex : 2
             });
+        }
+    },
+
+    lose : {
+        setup : function () {
+            this.audio.clear();
+            this.coq.entities.create(Splash, {
+                    source : this.myLoader.getFile('res/img/you_lose.png'),
+                    zindex : 2
+            });
+            this.unLoseFlag = false;
+        },
+        update : function () {
+            if (this.coq.inputter.isDown(this.coq.inputter.SPACE)) {
+                this.unLoseFlag = true;
+            }
+            if ((this.unLoseFlag && !this.coq.inputter.isDown(this.coq.inputter.SPACE))) {
+                this.unLoseFlag = false;
+                this.scriptState = this.returnToScriptState;
+            }
+        },
+        teardown : function() {
+            this.coq.entities.all().forEach(function(entity) {
+                this.coq.entities.destroy(entity);
+            }.bind(this));
         }
     }
 };

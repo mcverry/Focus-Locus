@@ -1,8 +1,8 @@
 var Game = function() {
     this.coq = new Coquette(this, "canvas", 800, 600, "#111");
 
-    this.startHere = 'level1Intro';
-    //this.startHere = 'level9';
+    //this.startHere = 'level1Intro';
+    this.startHere = 'level8';
 
     //this.prefixRes = 'http://strikesagainst.com/focus-locus/res/';
     this.prefixRes = 'http://localhost:8000/res/';
