@@ -43,7 +43,7 @@
         update : function(){
             if (this.strength <= 0) {
                 //console.log(this.popSound);
-                this.game.audio.play(this.popSound, {channel : this.id});
+                this.game.audio.play(this.popSound, {channel : this.id, volume : 0.5});
                 if (this.light) {
                     this.game.coq.entities.destroy(this.light);
                 }
