@@ -17,6 +17,7 @@ function getAssets(){
             'res/img/hangar.png',
             'res/img/ceiling_lens.png',
             'res/img/you_lose.png',
+            'res/img/dont_pop.png',
             "res/img/black_hole.png",
             'res/img/lens.png',
             'res/img/webb.png',

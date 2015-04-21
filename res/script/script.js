@@ -183,7 +183,7 @@ window.Script = {
         }
     },
 
-    level1Intro : ScriptUtil.newVideoTransition('test', 'level1'),
+    level1Intro : ScriptUtil.newVideoTransition('welcome', 'level1'),
 
     level1 : {
         setup : function() {
