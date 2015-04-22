@@ -494,7 +494,7 @@ window.Script = {
                     this.fails += 1;
                     this.coq.entities.destroy(balloon);
                 }
-            });
+            }.bind(this));
 
             if (asteroids.filter(function(balloon) {
                     return balloon.friend;
