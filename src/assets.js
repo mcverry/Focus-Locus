@@ -28,11 +28,11 @@ function getAssets(){
             'res/img/hot_air_balloon_2.png',
             'res/img/big_flashlight.png',
             'res/img/desert_front.png',
-            'welcome*:http://strikesagainst.com/focus-locus/res/vid/welcome.mp4||http://strikesagainst.com/focus-locus/res/vid/welcome.webm||http://strikesagainst.com/focus-locus/res/vid/welcome.ogg',
-            'asteroids-to-stars*:http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.mp4||http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.webm||http://strikesagainst.com/focus-locus/res/vid/asteroids-to-stars.ogg',
-            'bombs-to-asteroids*:http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.mp4||http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.webm||http://strikesagainst.com/focus-locus/res/vid/bombs-to-asteroids.ogg',
-            'flashlights-to-bombs*:http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.mp4||http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.webm||http://strikesagainst.com/focus-locus/res/vid/flashlights-to-bombs.ogg',
-            'good-job*:http://strikesagainst.com/focus-locus/res/vid/good-job.mp4||http://strikesagainst.com/focus-locus/res/vid/good-job.webm||http://strikesagainst.com/focus-locus/res/vid/good-job.ogg',
+            'welcome*:https://erty.me/random/Focus-Locus/res/vid/welcome.mp4||https://erty.me/random/Focus-Locus/res/vid/welcome.webm||https://erty.me/random/Focus-Locus/res/vid/welcome.ogg',
+            'asteroids-to-stars*:https://erty.me/random/Focus-Locus/res/vid/asteroids-to-stars.mp4||https://erty.me/random/Focus-Locus/res/vid/asteroids-to-stars.webm||https://erty.me/random/Focus-Locus/res/vid/asteroids-to-stars.ogg',
+            'bombs-to-asteroids*:https://erty.me/random/Focus-Locus/res/vid/bombs-to-asteroids.mp4||https://erty.me/random/Focus-Locus/res/vid/bombs-to-asteroids.webm||https://erty.me/random/Focus-Locus/res/vid/bombs-to-asteroids.ogg',
+            'flashlights-to-bombs*:https://erty.me/random/Focus-Locus/res/vid/flashlights-to-bombs.mp4||https://erty.me/random/Focus-Locus/res/vid/flashlights-to-bombs.webm||https://erty.me/random/Focus-Locus/res/vid/flashlights-to-bombs.ogg',
+            'good-job*:https://erty.me/random/Focus-Locus/res/vid/good-job.mp4||https://erty.me/random/Focus-Locus/res/vid/good-job.webm||https://erty.me/random/Focus-Locus/res/vid/good-job.ogg',
          ];
 }
 
