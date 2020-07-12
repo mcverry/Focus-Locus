@@ -3,7 +3,7 @@ var Game = function() {
 
     this.startHere = 'level1Intro';
 
-    this.prefixRes = 'http://erty.me/random/Focus-Locus/';
+    this.prefixRes = 'https://erty.me/random/Focus-Locus/res/';
 
     this.assetsLoaded = false;
     this.audioLoaded = false;
